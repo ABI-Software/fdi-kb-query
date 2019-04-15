@@ -1,13 +1,14 @@
 {
   "name": "fdikbquery",
-  "version": "0.0.1alpha",
+  "version": "0.0.2alpha",
   "description": "MAPcore Integrated Webapp",
   "main": "build/fdikbquery.js",
   "files": [
     "package.json",
     "LICENSE.txt",
     "README.md",
-    "build/knowkedgebasequery.js",
+    "build/fdikbquery.js",
+    "static",
     "webpack.config.js"
   ],
   "scripts": {
