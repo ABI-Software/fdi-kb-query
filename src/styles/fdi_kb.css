@@ -1,0 +1,16 @@
+.kbtable {
+  font-family: sans-serif, arial;
+  border-collapse: collapse;
+  width: 100%;
+  font-size:10px;
+}
+
+.kbtable td, th {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+}
+
+.kbtable tr:nth-child(even) {
+  background-color: #b2d8ff;;
+}

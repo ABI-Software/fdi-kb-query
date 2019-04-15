@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" style="height:100%">
+	<head>
+		<title>kb query demo</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		<style>			
+			body {
+				font-family: sans-serif;
+				color: #000;
+				margin: 0px;
+				
+		    background-position: center;
+		    background-repeat: no-repeat;
+		    background-size: cover;
+		    width: 100%;
+		    width: -moz-available;          /* WebKit-based browsers will ignore this. */
+		    width: -webkit-fill-available;  /* Mozilla-based browsers will ignore this. */
+		    width: fill-available;
+			}
+		</style>
+	</head>
+
+	<body style="height:100%;">
+		<div id="kb_query_div" style="height:100%;overflow: auto;font-family: sans-serif;border-color: black;">
+			<br><br>
+			<form id="query_form" style="width:20%;left:40%;position:relative;">
+			  Dataset:<br>
+			  <input type="text" name="dataset" value="nlx_152175-1"><br>
+			  Search term:<br>
+			  <input type="text" name="search-term" value="heart"><br>
+			  Count:<br>
+			  <input type="text" name="count" value="10">
+			  <br>
+			  <input type="submit" value="Search">
+			</form>
+			<br>
+			<div id="main_table" style="border:1;width:94%;left:3%;position:relative;font-size:20px;font-family: sans-serif, arial;">
+			</div>
+		</div>
+		<script src="../build/fdikbquery.js"></script>
+		<script src="index.js"></script>
+	</body>
+</html>
