@@ -27,7 +27,12 @@ module.exports = {
           test: /\.js$/,
           loader: 'babel-loader',
           query: {
-              presets: ['@babel/preset-env']
+              presets: ['@babel/preset-env',
+            	  ['minify',  {
+            		  builtIns: false,
+            		  evaluate: false,
+            		  mangle: false,
+            	   }]]
           }
       }
     ]
