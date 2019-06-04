@@ -5,6 +5,7 @@ require("./styles/fdi_kb.css");
 exports.FDI_KB_Query = function(parentIn)  {
   const endpoint = "/knowledgebase_query_reverse/";
   const parent = parentIn;
+  const callbacks = [];
   
   const drawTable = (data, queryParams) => {
 	  let resultString = "";
@@ -51,8 +52,19 @@ exports.FDI_KB_Query = function(parentIn)  {
 		  return array;
 	  }
   }
+  
+  this.addCallbackOnQuery = (callback) => {
+	  callbacks.push(callback);
+  }
+  
+  const onQuery = (queryParams) => {
+	  for (let i = 0; i < callbacks.length; i++) {
+		  callbacks[i](queryParams);
+	  }
+  } 
     
   this.query = (dataset, queryParams) => {
+	  onQuery(queryParams);
 	  parent.querySelectorAll("#query_form")[0][1].value = queryParams.q;
 	  axios.get(endpoint+dataset, {
 	    params: queryParams

@@ -1,6 +1,6 @@
 {
   "name": "fdikbquery",
-  "version": "0.0.3alpha",
+  "version": "0.0.4alpha",
   "description": "MAPcore Integrated Webapp",
   "main": "build/fdikbquery.js",
   "files": [
@@ -34,18 +34,18 @@
   },
   "homepage": "https://github.com/ABI-Software/mapcore-integrated-webapp",
   "devDependencies": {
+    "@babel/core": "^7.4.0",
+    "@babel/preset-env": "^7.4.2",
+    "axios": "^0.19.0",
+    "babel-loader": "^8.0.5",
+    "babel-preset-minify": "^0.5.0",
+    "css-loader": "^2.1.1",
     "file-loader": "^1.1.11",
     "html-loader": "^0.5.5",
     "style-loader": "^0.21.0",
-    "@babel/preset-env": "^7.4.2",
-    "@babel/core": "^7.4.0",
-    "babel-loader": "^8.0.5",
-    "babel-preset-minify": "^0.5.0",
     "webpack": "^4.20.2",
     "webpack-cli": "^3.1.1",
-    "axios": "^0.18.0",
-    "xml2js": "^0.4.19",
-    "css-loader": "^2.1.1"
+    "xml2js": "^0.4.19"
   },
   "dependencies": {}
 }
