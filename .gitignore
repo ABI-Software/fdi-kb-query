@@ -3,4 +3,5 @@ node_modules
 .settings
 build
 .tern-project
-
+.secrets/
+.idea/
