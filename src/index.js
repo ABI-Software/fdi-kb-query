@@ -132,8 +132,7 @@ exports.FDI_KB_Query = function(parentIn)  {
   }
 
   this.query = (data_set, query_params) => {
-    let params = Object.assign({}, query_params, {'key': secrets.key}) //, 'q': 'UBERON:0000948'})
-//	onQuery(params)
+    let params = Object.assign({}, query_params, {'key': secrets.key})
 	axios.get(kb_endpoint + data_set, {
 	   params: params,
 	 })
