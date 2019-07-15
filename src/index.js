@@ -1,16 +1,16 @@
 const axios = require('axios');
-const biolucidaclient_module = require('biolucidaclient').biolucidaclient
+const biolucidaclient_module = require('@abi-software/biolucidaclient').biolucidaclient_module
 const parseString = require('xml2js').parseString;
 let secrets = require("./.secrets/key")
-require("./styles/fdi_kb.css");
+require("./styles/searchwidget.css");
 
-exports.FDI_KB_Query = function(parentIn)  {
+exports.FDI_KB_Query_Module = function(parent_in)  {
   const kb_endpoint = "knowledgebase/"
-  const parent = parentIn;
-  const biolucidaclient = new biolucidaclient_module();
+  const parent = parent_in;
   const per_page = 5;
   const query_context = 'SCR_017041-3';
 
+  let biolucidaclient = undefined;
   let channel = undefined;
   let searchResults = undefined;
 
@@ -152,24 +152,27 @@ exports.FDI_KB_Query = function(parentIn)  {
   }
 
   const doQuery = () => {
-    let search_input = parent.querySelector("#search_form_input");
+    let search_input = parent.querySelector("#search-input");
     this.query(query_context, {q:search_input.value})
   }
 
   this.broadcastCallback = (message) => {
-    let search_input = parent.querySelector("#search_form_input");
-    search_input.value = message.data.data.type
-    doQuery()
+    let search_input = parent.querySelector("#search-input");
+    if (message.data.data.type) {
+      search_input.value = message.data.data.type
+      doQuery()
+    }
   }
 
    const initialise = () => {
      // Add my snippet for the query dialog to the parent element.
-     let search_widget = parent.querySelectorAll("#search_widget")[0];
-     if (!search_widget) {
-       parent.appendChild(this.htmlToElement(require("./snippets/fdikbquery.html")))
+     biolucidaclient = new biolucidaclient_module();
+     let container = parent.querySelector("#maptab_tabbar");
+     if (container !== undefined) {
+       container.insertBefore(this.htmlToElement(require("./snippets/searchwidget.html")), container.childNodes[0])
        channel = new BroadcastChannel('sparc-portal');
        channel.addEventListener('message', this.broadcastCallback);
-       let search_form = parent.querySelector("#search_form");
+       let search_form = container.querySelector("#search_form");
        if (search_form) {
          search_form.addEventListener("reset", this.clearResults);
          search_form.addEventListener("submit", event => {

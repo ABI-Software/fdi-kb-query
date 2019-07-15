@@ -1,24 +1,10 @@
 <div id="search_widget" class="search-overlay">
     <div class="search-container">
-        <form id="search_form">
-            <input id="search_form_input" class="search-box" type="text" placeholder="Search.."><button id="search_form_clear" class="close-icon" type="reset"></button><button><i class="fa fa-search"></i></button>
-        </form>
+<form role="search" method="get" id="search_form" class="search-form">
+  <label class="screen-reader-text" id="search-label" for="search-input">Search for:</label>
+  <input type="search" required="" name="s" id="search-input" class="search-field" placeholder="Search ..." value=""><button id="search_form_clear" class="close-icon" type="reset"></button><button type="submit" class="button-search"><i class="fa fa-search" width="18px" height="18px"></i></button>
+</form>
     </div>
     <div id="search_results" class="search-results">
     </div>
-    <!--
-    <form id="query_form" style="width:20%;left:40%;position:relative;">
-      Dataset:<br>
-      <input type="text" name="dataset" value="nlx_152175-1"><br>
-      Search term:<br>
-      <input type="text" name="search-term" value="heart"><br>
-      Count:<br>
-      <input type="text" name="count" value="10">
-      <br>
-      <input type="submit" value="Search">
-    </form>
-    <br>
-    <div id="main_table" style="border:1;width:94%;left:3%;position:relative;font-size:20px;font-family: sans-serif, arial;">
-    </div>
-    -->
 </div>
