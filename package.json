@@ -1,7 +1,7 @@
 {
   "name": "fdikbquery",
   "version": "0.0.4alpha",
-  "description": "MAPcore Integrated Webapp",
+  "description": "FDI Knowledge base query tool.",
   "main": "build/fdikbquery.js",
   "files": [
     "package.json",
@@ -18,7 +18,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ABI-Software/mapcore-integrated-webapp.git"
+    "url": "git+https://github.com/ABI-Software/fdi-kb-query.git"
   },
   "keywords": [
     "library",
@@ -30,10 +30,11 @@
   "author": "Alan Wu <alan.wu@auckland.ac.nz>",
   "license": "Apache-2.0",
   "bugs": {
-    "url": "https://github.com/ABI-Software/mapcore-integrated-webapp/issues"
+    "url": "https://github.com/ABI-Software/fdi-kb-query/issues"
   },
-  "homepage": "https://github.com/ABI-Software/mapcore-integrated-webapp",
+  "homepage": "https://github.com/ABI-Software/fdi-kb-query",
   "devDependencies": {
+    "@abi-software/biolucidaclient": "^0.1.0",
     "@babel/core": "^7.4.0",
     "@babel/preset-env": "^7.4.2",
     "axios": "^0.19.0",

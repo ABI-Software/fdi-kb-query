@@ -3,4 +3,6 @@ node_modules
 .settings
 build
 .tern-project
-
+.secrets/
+.idea/
+.DS_Store
