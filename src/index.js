@@ -11,6 +11,8 @@ exports.FDI_KB_Query_Module = function(parent_in)  {
   const per_page = 5;
   const query_context = 'SCR_017041-3';
 
+  const search_alternatives = {HB_155A_3: "UBERON:0000948", HB_155A_4: "UBERON:0000948", HB_100A_2: "UBERON:0000948", HB_155A_1: "UBERON:0000948" }
+
   let biolucidaclient = undefined;
   let channel = undefined;
   let search_results = undefined;
@@ -37,6 +39,9 @@ exports.FDI_KB_Query_Module = function(parent_in)  {
 const renderTitle = (title, overlay) => {
 var return_title = undefined
 var title_text = title.substring(0, title.indexOf("<a"))
+if (title_text == "") {
+  title_text = title
+}
 title_text = title_text.replace(/_/g, " ")
 
 var link_text = title.substring(title.indexOf("<a"))
@@ -78,7 +83,7 @@ if (max_length == undefined) {
       target_element.classList.add("cursor-pointer")
       target_element.onclick = function(event) {
         let supplementary_data = {'species': data["Scaffold"]["species"], 'organ': data["Scaffold"]["organ"], 'annotation': data["Scaffold"]["annotation"]}
-        let message_data = {action: "scaffold-show", resource: data["DataViewer"]["uri"], data: supplementary_data, sender: 'query-engine'};
+        let message_data = {action: "scaffold-show", resource: data["Scaffold"]["uri"], data: supplementary_data, sender: 'query-engine'};
         channel.postMessage(message_data)
       }
     }
@@ -88,7 +93,27 @@ if (max_length == undefined) {
       target_element.classList.add("cursor-pointer")
       target_element.onclick = function(event) {
         let supplementary_data = {'species': data["DataViewer"]["species"], 'organ': data["DataViewer"]["organ"], 'annotation': data["DataViewer"]["annotation"]}
-        let message_data = {action: "scaffold-show", resource: data["DataViewer"]["uri"], data: supplementary_data, sender: 'query-engine'};
+        let message_data = {action: "data-viewer-show", resource: data["DataViewer"]["uri"], data: supplementary_data, sender: 'query-engine'};
+        channel.postMessage(message_data)
+      }
+    }
+    if (haveFlatmap(data)) {
+      let target_element = element.querySelector("#mapcore_search_result_flatmap_map")
+      target_element.classList.remove("disabled-map")
+      target_element.classList.add("cursor-pointer")
+      target_element.onclick = function(event) {
+        let supplementary_data = {}
+        let message_data = {action: "flatmap-show", resource: "NCBITaxon:9606", data: supplementary_data, sender: 'query-engine'};
+        channel.postMessage(message_data)
+      }
+    }
+    if (haveSimulation(data)) {
+      let target_element = element.querySelector("#mapcore_search_result_simulation_map")
+      target_element.classList.remove("disabled-map")
+      target_element.classList.add("cursor-pointer")
+      target_element.onclick = function(event) {
+        let supplementary_data = {}
+        let message_data = {action: "simulation-show", resource: data["Simulation"]["uri"], data: supplementary_data, sender: 'query-engine'};
         channel.postMessage(message_data)
       }
     }
@@ -128,6 +153,22 @@ if (max_length == undefined) {
     return have;
   }
 
+  const haveFlatmap = (data) => {
+    let have = false;
+    if ("Species" in data && data["Species"].includes("NCBITaxon:9606")) {
+      have = true;
+    }
+    return have;
+  }
+
+  const haveSimulation = (data) => {
+    let have = false;
+    if ("Simulation" in data && "uri" in data["Simulation"] && data["Simulation"]["uri"]) {
+      have = true;
+    }
+    return have;
+  }
+
   const renderResult = (result_parent, data) => {
     let element = this.htmlToElement(require("./snippets/searchresult.html"))
     let heading = element.querySelector("#mapcore_search_result_heading")
@@ -144,6 +185,14 @@ if (max_length == undefined) {
     }
     if (haveDataViewer(data)) {
       let target_element = element.querySelector("#mapcore_search_result_data_viewer_map")
+      target_element.classList.remove("disabled-map")
+    }
+    if (haveFlatmap(data)) {
+      let target_element = element.querySelector("#mapcore_search_result_flatmap_map")
+      target_element.classList.remove("disabled-map")
+    }
+    if (haveSimulation(data)) {
+      let target_element = element.querySelector("#mapcore_search_result_simulation_map")
       target_element.classList.remove("disabled-map")
     }
     let image_block = element.querySelector("#mapcore_search_result_image")
@@ -178,8 +227,8 @@ if (max_length == undefined) {
   }
 
   const renderResults = (data, page_number) => {
+      this.clearResults(true)
 	  if (data) {
-	    this.clearResults(true)
 	    paged_data = paginator(data, page_number, per_page)
 	    let search_results_element = parent.querySelector('#mapcore_search_results_list')
 	    for (let i=0; i < paged_data.data.length; i++) {
@@ -226,12 +275,40 @@ if (max_length == undefined) {
       for (let i = 0; i < data.length; i++) { //https://app.blackfynn.io/N:organization:618e8dd9-f8d2-4dc4-9abb-c6aaab2e78a0/datasets/N:dataset:0170271a-8fac-4769-a8f5-2b9520291d03
         let blackfynn_id = data[i]['BlackfynnID']
         if (blackfynn_id.includes('N:organization:618e8dd9-f8d2-4dc4-9abb-c6aaab2e78a0') &&
-           blackfynn_id.includes('N:dataset:0170271a-8fac-4769-a8f5-2b9520291d03') ) {
+           blackfynn_id.includes('N:dataset:0170271a-8fac-4769-a8f5-2b9520291d03')) {
            data[i]['Example Image'] = '106' //http://sparc.biolucida.net/link?l=vua1n9'
            data[i]['Scaffold'] = {'uri': 'https://mapcore-bucket1.s3-us-west-2.amazonaws.com/ISAN/scaffold/use_case4/rat_heart_metadata.json', 'species': 'rat', 'organ': 'heart', 'annotation': 'UBERON:0000948'}
            data[i]['DataViewer'] = {'uri': 'https://mapcore-bucket1.s3-us-west-2.amazonaws.com/ISAN/csv-data/use-case-4/RNA_Seq.csv', 'species': 'rat', 'organ': 'heart', 'annotation': 'UBERON:0000948'}
+        } else if (blackfynn_id.includes('N:organization:618e8dd9-f8d2-4dc4-9abb-c6aaab2e78a0') &&
+           blackfynn_id.includes('N:dataset:a7b035cf-e30e-48f6-b2ba-b5ee479d4de3')) {
+           data[i]['Scaffold'] = {'uri': 'https://mapcore-bucket1.s3-us-west-2.amazonaws.com/ISAN/scaffold/stomach/stomach_metadata.json', 'species': 'rat', 'organ': 'stomach', 'annotation': 'UBERON:0000945'}
+        } else if (blackfynn_id.includes('N:organization:618e8dd9-f8d2-4dc4-9abb-c6aaab2e78a0') &&
+           blackfynn_id.includes('N:dataset:e4bfb720-a367-42ab-92dd-31fd7eefb82e')) {
+           data[i]['Example Image'] = '164' //http://sparc.biolucida.net/link?l=vua1n9'
         }
       }
+      if (params.q.toUpperCase() === "HEART" || params.q === "UBERON:0000948") {
+        data.push({"Dataset Title": "Autonomic Nerve Stimulation Simulation", "Description": "This data links to a simulation experiment of the autonomic nerves innervating the heart.",
+         "Example Image": "", "Simulation": {"uri": "https://osparc.io/study/194bb264-a717-11e9-9dff-02420aff2767", 'species': 'Human', 'organ': 'heart', 'annotation': 'UBERON:0000948'}}
+        )
+      } else if (params.q.toUpperCase() === "STELLATE" || params.q === "UBERON:0002440") {
+        data.push({"Dataset Title": "Mouse Stellate Ganglion", "Description": "Data from the Shivkumar/Tompkins group displayed in a 3D stellate scaffold.",
+          "Example Image": "", "Scaffold": {"uri": "https://mapcore-bucket1.s3-us-west-2.amazonaws.com/ISAN/scaffold/stellate/stellate_metadata.json", 'species': 'Mouse', 'organ': 'nerve', 'annotation': 'UBERON:0002440'},
+          "DataViewer": {"uri": "https://mapcore-bucket1.s3-us-west-2.amazonaws.com/ISAN/csv-data/use-case-2/Sample_1_18907001_channel_1.csv", 'species': 'Mouse', 'organ': 'nerve', 'annotation': 'UBERON:0002440'}}
+        )
+      } else if (params.q.toUpperCase().includes("LUNG") || params.q === "UBERON:0002048") {
+        data.push({"Dataset Title": "Data for Mouse Lungs", "Description": "Data from Tom Taylor-Clark visualised on a 3D scaffold with electrophysiclogical data.",
+          "Example Image": "", "Scaffold": {"uri": "https://mapcore-bucket1.s3-us-west-2.amazonaws.com/ISAN/scaffold/lungs/lungs_metadata.json", 'species': 'Mouse', 'organ': 'lung', 'annotation': 'UBERON:0002048'}}
+        )
+      }  else if (params.q.toUpperCase().includes("LUNG") || params.q === "UBERON:0001155") {
+        data.push({"Dataset Title": "Mouse Colon MRI Data", "Description": "Data from the Howard & Tache groups where a 3D scaffold fitted to these data will be visualised on a 3D scaffold.",
+          "Example Image": "", "Scaffold": {"uri": "https://mapcore-bucket1.s3-us-west-2.amazonaws.com/ISAN/scaffold/lungs/lungs_metadata.json", 'species': 'Mouse', 'organ': 'colon', 'annotation': 'UBERON:0001155'}}
+        )
+      }
+    } else if (params.q == 'flatmap') {
+      data = []
+      data[0] = {"Dataset Title": "Human Flatmap", "Description": "This dataset holds a description of a flatmap representation of the major human organs.",
+         "Example Image": "", "Species": "NCBITaxon:9606"}
     }
     return data
   }
@@ -293,7 +370,7 @@ if (max_length == undefined) {
 	 })
 	 .then(function (response) {
 	    parseString(response.data, function (err, result) {
-	      if (result !== undefined) {
+	      if (result != undefined) {
             let data = jsonifyResults(result.responseWrapper.result[0].results[0].row);
             search_results = augmentResults(data, query_params)
             renderResults(search_results, 1);
@@ -310,7 +387,11 @@ if (max_length == undefined) {
 
   const doQuery = () => {
     let search_input = parent.querySelector("#mapcore_search_input");
-    this.query(query_context, {q:search_input.value})
+    let search_term = search_input.value
+    if (search_input.value in search_alternatives) {
+      search_term = search_alternatives[search_input.value]
+    }
+    this.query(query_context, {q:search_term})
   }
 
   this.broadcastCallback = (message) => {
@@ -340,9 +421,8 @@ if (max_length == undefined) {
   const initialise = () => {
     // Add my snippet for the query dialog to the parent element.
     biolucidaclient = new biolucidaclient_module();
-    //channel = new BroadcastChannel('sparc-mapcore-channel');
     channel = new (require('broadcast-channel').default)('sparc-mapcore-channel');
-    channel.onmessage = this.broadcastCallback //addEventListener('message', this.broadcastCallback);
+    channel.onmessage = this.broadcastCallback
     let container = parent.querySelector("#maptab_contents");
     if (container != undefined) {
       setupSearchResults(container);
