@@ -1,6 +1,6 @@
 {
   "name": "fdikbquery",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "FDI Knowledge base query tool.",
   "main": "build/fdikbquery.js",
   "files": [
@@ -34,7 +34,7 @@
   },
   "homepage": "https://github.com/ABI-Software/fdi-kb-query",
   "devDependencies": {
-    "@abi-software/biolucidaclient": "^0.2.1",
+    "@abi-software/biolucidaclient": "^0.2.0",
     "@babel/core": "^7.4.0",
     "@babel/preset-env": "^7.4.2",
     "axios": "^0.19.0",
