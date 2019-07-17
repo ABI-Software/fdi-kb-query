@@ -1,9 +1,15 @@
 
+.margin-right-8 {
+    margin-right: 8%;
+}
+
 #mapcore_search_widget {
+/*
   display: flex;
   float: left;
   margin-right: 3px;
   margin-left: 2px;
+*/
 }
 
 #mapcore_search_form {
@@ -23,6 +29,26 @@
   margin-bottom: 8px;
   margin-left: 8px;
   font-size: 17px;
+}
+
+#mapcore_search_results_container {
+    float: left;
+    width: 25%;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    overflow-y: auto;
+    margin: 0 0.5%;
+}
+
+.hidden {
+  display: none;
+}
+
+.margin-left-26 {
+    margin-left: 26%;
 }
 
 /*

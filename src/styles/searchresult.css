@@ -1,0 +1,43 @@
+.search-result {
+  width: 375px;
+}
+
+.search-result .description {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.search-result:hover .description {
+  white-space: unset;
+  text-overflow: unset;
+  overflow:unset;
+}
+
+.search-result h3#heading {
+  overflow: auto;
+}
+
+.search-result span {
+    display: inline-block;
+    width: 96px;
+    height: 96px;
+    border: 1px solid #888;
+    position: relative;
+}
+
+.search-result img {
+    max-width: 96px;
+    max-height: 96px;
+    width: auto;
+    height: auto;
+    border: 0;
+
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+
+    margin: auto;
+}

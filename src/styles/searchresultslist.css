@@ -1,0 +1,38 @@
+.zoom {
+  background-color: green;
+  transition: transform .2s; /* Animation */
+  margin: 0 auto;
+  transform-origin: 5% 50%;
+}
+
+.zoom:hover {
+  transform: scale(1.05); /* (150% zoom - Note: if the zoom is too large, it will go outside of the viewport) */
+  transform-origin: 5% 50%;
+ /* z-index: 2; */
+}
+
+.search-footer {
+  position: -webkit-sticky;
+  position: sticky;
+  bottom: 9px;
+}
+
+.search-footer p {
+  text-align: center;
+}
+
+.search-results button {
+   border-radius: 5px;
+}
+
+.search-footer button {
+   border-radius: 5px;
+}
+
+.search-footer #mapcore_next_page {
+  margin-left: 2px;
+}
+
+.search-footer #mapcore_prev_page {
+  margin-right: 2px;
+}

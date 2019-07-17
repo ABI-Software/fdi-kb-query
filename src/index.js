@@ -1,8 +1,9 @@
 const axios = require('axios');
 const biolucidaclient_module = require('@abi-software/biolucidaclient').biolucidaclient_module
 const parseString = require('xml2js').parseString;
-let secrets = require("./.secrets/key")
 require("./styles/searchwidget.css");
+require("./styles/searchresultslist.css");
+require("./styles/searchresult.css");
 
 exports.FDI_KB_Query_Module = function(parent_in)  {
   const kb_endpoint = "knowledgebase/"
@@ -12,7 +13,7 @@ exports.FDI_KB_Query_Module = function(parent_in)  {
 
   let biolucidaclient = undefined;
   let channel = undefined;
-  let searchResults = undefined;
+  let search_results = undefined;
 
   const paginator = (items, page, per_page) => {
 
@@ -33,21 +34,21 @@ exports.FDI_KB_Query_Module = function(parent_in)  {
     };
   }
 
-  const renderResult = (parent, data) => {
+  const renderResult = (result_parent, data) => {
     let element = this.htmlToElement(require("./snippets/searchresult.html"))
-    let heading = element.querySelector("#heading");
+    let heading = element.querySelector("#mapcore_search_result_heading");
     heading.innerHTML = data['Dataset Title']
-    let paragraph = element.querySelector("#paragraph");
+    let paragraph = element.querySelector("#mapcore_search_result_paragraph");
     paragraph.innerHTML = data['Description']
-    let image_paragraph = element.querySelector("#image_paragraph");
+    let image_paragraph = element.querySelector("#mapcore_search_result_image_paragraph");
     image_paragraph.classList.add("float-left")
     let img_id = data['Example Image']
     if (img_id) {
-      let image = element.querySelector("#thumbnail")
+      let image = element.querySelector("#mapcore_search_result_thumbnail")
       image.classList.remove('optional')
       biolucidaclient.get_thumbnail(image, img_id)
     }
-    parent.appendChild(element)
+    result_parent.appendChild(element)
   }
 
   const setupButton = (element, page_number) => {
@@ -59,33 +60,56 @@ exports.FDI_KB_Query_Module = function(parent_in)  {
     }
   }
 
-  const renderFooter = (parent, prior_page, next_page) => {
+  const renderFooter = (footer_parent, prior_page, next_page) => {
     let element = this.htmlToElement(require("./snippets/searchfooter.html"))
-    let prior_page_element = element.querySelector("#prior_page")
+    let prior_page_element = element.querySelector("#mapcore_prev_page")
     setupButton(prior_page_element, prior_page)
-    let next_page_element = element.querySelector("#next_page")
+    let next_page_element = element.querySelector("#mapcore_next_page")
     setupButton(next_page_element, next_page)
-    parent.appendChild(element)
+    footer_parent.appendChild(element)
   }
 
   const renderResults = (data, page_number) => {
 	  if (data) {
-	    this.clearResults()
+	    this.clearResults(true)
 	    paged_data = paginator(data, page_number, per_page)
-	    let search_results = parent.querySelector('#search_results')
+	    let search_results_element = parent.querySelector('#mapcore_search_results_list')
 	    for (let i=0; i < paged_data.data.length; i++) {
-          renderResult(search_results, paged_data.data[i])
+          renderResult(search_results_element, paged_data.data[i])
 	    }
-	    renderFooter(search_results, paged_data.pre_page, paged_data.next_page)
+	    renderFooter(search_results_element, paged_data.pre_page, paged_data.next_page)
+	    showSearchResults(true)
 	  }
   }
 
-  this.clearResults = () => {
-    let search_results = parent.querySelector('#search_results')
-    let child = search_results.lastElementChild;
+  const setElementClass = (element, state, css_class) => {
+    if (state) {
+      element.classList.add(css_class)
+    } else {
+      element.classList.remove(css_class)
+    }
+  }
+
+  const showSearchResults = (state) => {
+    let elements = parent.querySelectorAll('.maptab-tab-content')
+    elements.forEach( function (element) {
+      setElementClass(element, state, "margin-left-26")
+    })
+    let search_results_element = parent.querySelector("#mapcore_search_results_container")
+    setElementClass(search_results_element, !state, "hidden")
+    let search_widget_element = parent.querySelector("#mapcore_search_widget")
+    setElementClass(search_widget_element, state, "margin-right-8")
+  }
+
+  this.clearResults = (soft_clear) => {
+    if (soft_clear !== true) {
+      showSearchResults(false)
+    }
+    let search_results_element = parent.querySelector('#mapcore_search_results_list')
+    let child = search_results_element.lastElementChild;
     while (child) {
-      search_results.removeChild(child);
-      child = search_results.lastElementChild;
+      search_results_element.removeChild(child);
+      child = search_results_element.lastElementChild;
     }
   }
 
@@ -117,7 +141,7 @@ exports.FDI_KB_Query_Module = function(parent_in)  {
   }
 
   this.onPageChange = (event) => {
-    renderResults(searchResults, parseInt(event.srcElement.getAttribute("page_number")));
+    renderResults(search_results, parseInt(event.srcElement.getAttribute("page_number")));
   }
 
  /**
@@ -132,15 +156,16 @@ exports.FDI_KB_Query_Module = function(parent_in)  {
   }
 
   this.query = (data_set, query_params) => {
-    let params = Object.assign({}, query_params, {'key': secrets.key})
 	axios.get(kb_endpoint + data_set, {
-	   params: params,
+	   params: query_params,
 	 })
 	 .then(function (response) {
 	    parseString(response.data, function (err, result) {
-	      let data = jsonifyResults(result.responseWrapper.result[0].results[0].row);
-	      searchResults = augmentResults(data, params)
-	      renderResults(searchResults, 1);
+	      if (result !== undefined) {
+            let data = jsonifyResults(result.responseWrapper.result[0].results[0].row);
+            search_results = augmentResults(data, query_params)
+            renderResults(search_results, 1);
+	      }
 	    });
 	  })
 	  .catch(function (error) {
@@ -152,35 +177,47 @@ exports.FDI_KB_Query_Module = function(parent_in)  {
   }
 
   const doQuery = () => {
-    let search_input = parent.querySelector("#search-input");
+    let search_input = parent.querySelector("#mapcore_search_input");
     this.query(query_context, {q:search_input.value})
   }
 
   this.broadcastCallback = (message) => {
-    let search_input = parent.querySelector("#search-input");
-    if (message.data.data.type) {
-      search_input.value = message.data.data.type
+    let search_input = parent.querySelector("#mapcore_search_input");
+    if (message.data.data.resource) {
+      search_input.value = message.data.data.resource
       doQuery()
     }
   }
 
-   const initialise = () => {
-     // Add my snippet for the query dialog to the parent element.
-     biolucidaclient = new biolucidaclient_module();
-     let container = parent.querySelector("#maptab_tabbar");
-     if (container !== undefined) {
-       container.insertBefore(this.htmlToElement(require("./snippets/searchwidget.html")), container.childNodes[0])
-       channel = new BroadcastChannel('sparc-portal');
-       channel.addEventListener('message', this.broadcastCallback);
-       let search_form = container.querySelector("#search_form");
-       if (search_form) {
-         search_form.addEventListener("reset", this.clearResults);
-         search_form.addEventListener("submit", event => {
-           event.preventDefault()
-           doQuery()
-         })
-       }
-     }
+  const setupSearchWidget = (container) => {
+    container.insertBefore(this.htmlToElement(require("./snippets/searchwidget.html")), container.childNodes[0])
+    let search_form = container.querySelector("#mapcore_search_form");
+    if (search_form) {
+      search_form.addEventListener("reset", this.clearResults);
+      search_form.addEventListener("submit", event => {
+        event.preventDefault()
+        doQuery()
+      })
+    }
+  }
+
+  const setupSearchResults = (container) => {
+    container.insertBefore(this.htmlToElement(require("./snippets/searchresultslist.html")), container.childNodes[0])
+  }
+
+  const initialise = () => {
+    // Add my snippet for the query dialog to the parent element.
+    biolucidaclient = new biolucidaclient_module();
+    channel = new BroadcastChannel('sparc-portal');
+    channel.addEventListener('message', this.broadcastCallback);
+    let container = parent.querySelector("#maptab_contents");
+    if (container !== undefined) {
+      setupSearchResults(container);
+    }
+    container = parent.querySelector("#maptab_tabbar");
+    if (container !== undefined) {
+      setupSearchWidget(container);
+    }
   }
 
   initialise();
