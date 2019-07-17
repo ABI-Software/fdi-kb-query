@@ -1,0 +1,127 @@
+.search-result {
+  position: relative;
+    background-color: white;
+    border: 1px solid;
+    border-radius: 7px;
+    margin: 2px 0;
+}
+
+.float-left {
+  float: left;
+}
+
+.search-result .description {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.search-result:hover .description_off {
+  white-space: unset;
+  text-overflow: unset;
+  overflow:unset;
+}
+
+#search_result_overlay .description {
+  white-space: unset;
+  text-overflow: unset;
+  overflow:unset;
+}
+
+#mapcore_search_result_curated_data_paragraph.hidden {
+  display: none;
+}
+
+.search-result h3#heading {
+  overflow: auto;
+}
+
+#mapcore_search_result_scaffold_map.search-result-icon, #mapcore_search_result_data_viewer_map.search-result-icon, #mapcore_search_result_simulation_map.search-result-icon, #mapcore_search_result_flatmap_map.search-result-icon {
+  width: 1em;
+  height: 1em;
+  border: none;
+}
+
+#mapcore_search_result_curated_data_paragraph {
+  border: none;
+  height: 1em;
+  width: auto;
+  color: red;
+}
+
+#mapcore_search_result_image {
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.search-result span {
+    display: inline-block;
+    width: 96px;
+    height: 96px;
+    border: 1px solid #888;
+    position: relative;
+    margin-right: 5px;
+}
+
+.search-result img {
+    max-width: 96px;
+    max-height: 96px;
+    width: auto;
+    height: auto;
+    border: 0;
+
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+
+    margin: auto;
+}
+
+#mapcore_search_result_scaffold_map.disabled-map, #mapcore_search_result_flatmap_map.disabled-map, #mapcore_search_result_data_viewer_map.disabled-map, #mapcore_search_result_simulation_map.disabled-map {
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 116 116'><title>sparc-data-map</title><circle cx='58' cy='58' r='57.5' style='fill:%23999'/><path d='M320,183a57,57,0,1,1-57,57,57.06,57.06,0,0,1,57-57m0-1a58,58,0,1,0,58,58,58,58,0,0,0-58-58Z' transform='translate(-262 -182)'/></svg>");
+}
+
+#mapcore_search_result_scaffold_map {
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 116 116'><title>sparc-data-map</title><circle cx='58' cy='58' r='57.5' style='fill:%230071bc'/><path d='M320,183a57,57,0,1,1-57,57,57.06,57.06,0,0,1,57-57m0-1a58,58,0,1,0,58,58,58,58,0,0,0-58-58Z' transform='translate(-262 -182)'/></svg>");
+}
+
+#mapcore_search_result_data_viewer_map {
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 116 116'><title>sparc-data-map</title><circle cx='58' cy='58' r='57.5' style='fill:%2339b54a'/><path d='M320,183a57,57,0,1,1-57,57,57.06,57.06,0,0,1,57-57m0-1a58,58,0,1,0,58,58,58,58,0,0,0-58-58Z' transform='translate(-262 -182)'/></svg>");
+}
+
+#mapcore_search_result_simulation_map {
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 116 116'><title>sparc-data-map</title><circle cx='58' cy='58' r='57.5' style='fill:%2393278f'/><path d='M320,183a57,57,0,1,1-57,57,57.06,57.06,0,0,1,57-57m0-1a58,58,0,1,0,58,58,58,58,0,0,0-58-58Z' transform='translate(-262 -182)'/></svg>");
+}
+
+#mapcore_search_result_flatmap_map {
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 116 116'><title>sparc-data-map</title><circle cx='58' cy='58' r='57.5' style='fill:%23f7931e'/><path d='M320,183a57,57,0,1,1-57,57,57.06,57.06,0,0,1,57-57m0-1a58,58,0,1,0,58,58,58,58,0,0,0-58-58Z' transform='translate(-262 -182)'/></svg>");
+}
+
+ .cursor-pointer {
+  cursor: pointer;
+}
+
+.overlay {
+    top: 20%;
+    left: 24%;
+    width: 30%;
+    height: 60%;
+    display: none;
+    position: fixed;
+    z-index: 1000000;
+}
+
+.search-result:hover .overlay {
+  display: block;
+  background-color: #e6f0ff;
+  padding: 4px;
+  border: 2px solid;
+}
+
+/*
+#search_result_overlay:focus {
+  display: none;
+}
+*/
