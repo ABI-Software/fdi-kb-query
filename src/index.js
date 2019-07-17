@@ -300,9 +300,9 @@ if (max_length == undefined) {
         data.push({"Dataset Title": "Data for Mouse Lungs", "Description": "Data from Tom Taylor-Clark visualised on a 3D scaffold with electrophysiclogical data.",
           "Example Image": "", "Scaffold": {"uri": "https://mapcore-bucket1.s3-us-west-2.amazonaws.com/ISAN/scaffold/lungs/lungs_metadata.json", 'species': 'Mouse', 'organ': 'lung', 'annotation': 'UBERON:0002048'}}
         )
-      }  else if (params.q.toUpperCase().includes("LUNG") || params.q === "UBERON:0001155") {
+      }  else if (params.q.toUpperCase().includes("COLON") || params.q === "UBERON:0001155") {
         data.push({"Dataset Title": "Mouse Colon MRI Data", "Description": "Data from the Howard & Tache groups where a 3D scaffold fitted to these data will be visualised on a 3D scaffold.",
-          "Example Image": "", "Scaffold": {"uri": "https://mapcore-bucket1.s3-us-west-2.amazonaws.com/ISAN/scaffold/lungs/lungs_metadata.json", 'species': 'Mouse', 'organ': 'colon', 'annotation': 'UBERON:0001155'}}
+          "Example Image": "", "Scaffold": {"uri": "https://mapcore-bucket1.s3-us-west-2.amazonaws.com/ISAN/scaffold/colon/colon_metadata.json", 'species': 'Mouse', 'organ': 'colon', 'annotation': 'UBERON:0001155'}}
         )
       }
     } else if (params.q == 'flatmap') {
