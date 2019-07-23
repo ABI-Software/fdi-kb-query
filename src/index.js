@@ -1,9 +1,12 @@
 const axios = require('axios');
 const biolucidaclient_module = require('@abi-software/biolucidaclient').biolucidaclient_module
+const prepackagedresults_module = require('@abi-software/mapcore-pre-packaged-results').mapcore_pre_packaged_results_module
+const augmentedresults_module = require('@abi-software/mapcore-augmented-results').mapcore_augmented_results_module
 const parseString = require('xml2js').parseString;
 require("./styles/searchwidget.css");
 require("./styles/searchresultslist.css");
 require("./styles/searchresult.css");
+require("./styles/searchdiv.css");
 
 exports.FDI_KB_Query_Module = function(parent_in)  {
   const kb_endpoint = "knowledgebase/"
@@ -13,7 +16,9 @@ exports.FDI_KB_Query_Module = function(parent_in)  {
 
   const search_alternatives = {HB_155A_3: "UBERON:0000948", HB_155A_4: "UBERON:0000948", HB_100A_2: "UBERON:0000948", HB_155A_1: "UBERON:0000948" }
 
-  let biolucidaclient = undefined;
+  let biolucida_client = undefined;
+  let pre_packaged_results = undefined;
+  let augmented_results = undefined;
   let channel = undefined;
   let search_results = undefined;
 
@@ -115,7 +120,20 @@ if (max_length == undefined) {
         let supplementary_data = {}
         let message_data = {action: "simulation-show", resource: data["Simulation"]["uri"], data: supplementary_data, sender: 'query-engine'};
         channel.postMessage(message_data)
-      }
+        console.log('execute simulation.')
+        let params  = {}
+        let osparc_endpoint = 'osparc/1/0.6'
+ axios.get(osparc_endpoint, {
+	   params: params,
+	 })
+	 .then(function (response) {
+    	 console.log(response)
+	  })
+	  .catch(function (error) {
+	    console.log("------- oSPARC REQUEST ERROR ---------")
+	    console.log(error);
+	  })
+	  }
     }
     let image_block = element.querySelector("#mapcore_search_result_image")
     image_block.classList.add("float-left")
@@ -123,7 +141,7 @@ if (max_length == undefined) {
     if (img_id) {
       let image = element.querySelector("#mapcore_search_result_thumbnail")
       image_block.classList.remove('hidden')
-      biolucidaclient.get_thumbnail(image, img_id)
+      biolucida_client.get_thumbnail(image, img_id)
     }
 
     overlay_parent.appendChild(element)
@@ -201,7 +219,7 @@ if (max_length == undefined) {
     if (img_id) {
       let image = element.querySelector("#mapcore_search_result_thumbnail")
       image_block.classList.remove('hidden')
-      biolucidaclient.get_thumbnail(image, img_id)
+      biolucida_client.get_thumbnail(image, img_id)
     }
     let overlay_element = element.querySelector('#search_result_overlay')
     renderOverlayResult(overlay_element, data)
@@ -217,13 +235,26 @@ if (max_length == undefined) {
     }
   }
 
-  const renderFooter = (footer_parent, prior_page, next_page) => {
+  const renderFooter = (footer_parent, paged_data) => {
     let element = this.htmlToElement(require("./snippets/searchfooter.html"))
     let prior_page_element = element.querySelector("#mapcore_prev_page")
-    setupButton(prior_page_element, prior_page)
+    setupButton(prior_page_element, paged_data.pre_page)
     let next_page_element = element.querySelector("#mapcore_next_page")
-    setupButton(next_page_element, next_page)
+    setupButton(next_page_element, paged_data.next_page)
+    let first_on_page = (paged_data.page - 1) * paged_data.per_page + 1
+    let first_on_page_element = element.querySelector("#mapcore_search_first_on_page")
+    first_on_page_element.innerHTML = first_on_page.toString()
+    let last_on_page = first_on_page + paged_data.per_page -1
+    let last_on_page_element = element.querySelector("#mapcore_search_last_on_page")
+    last_on_page_element.innerHTML = Math.min(last_on_page, paged_data.total).toString()
+    let total_element = element.querySelector("#mapcore_search_total")
+    total_element.innerHTML = paged_data.total
     footer_parent.appendChild(element)
+  }
+
+  const renderHeader = (header_parent) => {
+    let element = this.htmlToElement(require("./snippets/searchheader.html"))
+    header_parent.appendChild(element)
   }
 
   const renderResults = (data, page_number) => {
@@ -231,10 +262,11 @@ if (max_length == undefined) {
 	  if (data) {
 	    paged_data = paginator(data, page_number, per_page)
 	    let search_results_element = parent.querySelector('#mapcore_search_results_list')
+	    renderHeader(search_results_element)
 	    for (let i=0; i < paged_data.data.length; i++) {
           renderResult(search_results_element, paged_data.data[i])
 	    }
-	    renderFooter(search_results_element, paged_data.pre_page, paged_data.next_page)
+	    renderFooter(search_results_element, paged_data)
 	    showSearchResults(true)
 	  }
   }
@@ -248,14 +280,14 @@ if (max_length == undefined) {
   }
 
   const showSearchResults = (state) => {
-    let elements = parent.querySelectorAll('.maptab-tab-content')
-    elements.forEach( function (element) {
-      setElementClass(element, state, "margin-left-26")
-    })
-    let search_results_element = parent.querySelector("#mapcore_search_results_container")
-    setElementClass(search_results_element, !state, "hidden")
-    let search_widget_element = parent.querySelector("#mapcore_search_widget")
-    setElementClass(search_widget_element, state, "margin-right-8")
+//    let elements = parent.querySelectorAll('.maptab-tab-content')
+//    elements.forEach( function (element) {
+//      setElementClass(element, state, "margin-left-26")
+//    })
+//    let search_results_element = parent.querySelector("#mapcore_search_results_container")
+//    setElementClass(search_results_element, !state, "zero-width")
+//    let search_widget_element = parent.querySelector("#mapcore_search_widget")
+//    setElementClass(search_widget_element, state, "margin-right-8")
   }
 
   this.clearResults = (soft_clear) => {
@@ -301,7 +333,7 @@ if (max_length == undefined) {
           "Example Image": "", "Scaffold": {"uri": "https://mapcore-bucket1.s3-us-west-2.amazonaws.com/ISAN/scaffold/lungs/lungs_metadata.json", 'species': 'Mouse', 'organ': 'lung', 'annotation': 'UBERON:0002048'}}
         )
       }  else if (params.q.toUpperCase().includes("COLON") || params.q === "UBERON:0001155") {
-        data.push({"Dataset Title": "Mouse Colon MRI Data", "Description": "Data from the Howard & Tache groups where a 3D scaffold fitted to these data will be visualised on a 3D scaffold.",
+        data.push({"Dataset Title": "Mouse Colon Data", "Description": "Data from the Howard & Tache groups where a 3D scaffold fitted to these data will be visualised on a 3D scaffold.",
           "Example Image": "", "Scaffold": {"uri": "https://mapcore-bucket1.s3-us-west-2.amazonaws.com/ISAN/scaffold/colon/colon_metadata.json", 'species': 'Mouse', 'organ': 'colon', 'annotation': 'UBERON:0001155'}}
         )
       }
@@ -350,7 +382,7 @@ if (max_length == undefined) {
   }
 
   this.onPageChange = (event) => {
-    renderResults(search_results, parseInt(event.srcElement.getAttribute("page_number")));
+    renderResults(search_results, parseInt(event.currentTarget.getAttribute("page_number")));
   }
 
  /**
@@ -372,8 +404,14 @@ if (max_length == undefined) {
 	    parseString(response.data, function (err, result) {
 	      if (result != undefined) {
             let data = jsonifyResults(result.responseWrapper.result[0].results[0].row);
-            search_results = augmentResults(data, query_params)
-            renderResults(search_results, 1);
+            if (data == undefined) {
+              tooltip_element = parent.querySelector("#mapcore_search_input_tooltip")
+              tooltip_element.classList.add("show")
+              setTimeout(function(){ tooltip_element.classList.remove("show"); }, 3000);
+            } else {
+              search_results = augmentResults(data, query_params)
+              renderResults(search_results, 1);
+            }
 	      }
 	    });
 	  })
@@ -414,23 +452,32 @@ if (max_length == undefined) {
     }
   }
 
+  const setupSearchDiv = (container) => {
+    container.firstElementChild.after(this.htmlToElement(require("./snippets/searchdiv.html")))
+    let search_form = container.querySelector(".mapcore-search-form");
+    if (search_form) {
+      search_form.addEventListener("reset", this.clearResults);
+      search_form.addEventListener("submit", event => {
+        event.preventDefault()
+        doQuery()
+      })
+    }
+  }
+
   const setupSearchResults = (container) => {
-    container.insertBefore(this.htmlToElement(require("./snippets/searchresultslist.html")), container.childNodes[0])
+    container.firstElementChild.after(this.htmlToElement(require("./snippets/searchresultslist.html")))
   }
 
   const initialise = () => {
     // Add my snippet for the query dialog to the parent element.
-    biolucidaclient = new biolucidaclient_module();
+    biolucida_client = new biolucidaclient_module();
+    prepackagedresults = new prepackagedresults_module();
+    augmented_results = new augmentedresults_module();
     channel = new (require('broadcast-channel').default)('sparc-mapcore-channel');
     channel.onmessage = this.broadcastCallback
-    let container = parent.querySelector("#maptab_contents");
-    if (container != undefined) {
-      setupSearchResults(container);
-    }
-    container = parent.querySelector("#maptab_tabbar");
-    if (container != undefined) {
-      setupSearchWidget(container);
-    }
+
+    setupSearchResults(parent);
+    setupSearchDiv(parent);
   }
 
   initialise();
