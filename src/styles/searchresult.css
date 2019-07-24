@@ -10,6 +10,12 @@
   float: left;
 }
 
+#mapcore_search_result_heading {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
 .search-result .description {
   text-overflow: ellipsis;
   white-space: nowrap;

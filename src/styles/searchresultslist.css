@@ -12,33 +12,33 @@
 }
 
 #mapcore_search_results_list {
-  margin-left: 5px;
-  margin-right: 5px;
-  margin-top: 2.5em;
-  margin-bottom: 2.5em;
+  margin: 5px;
 }
 
 #mapcore_search_results_container {
   position: relative;
-  display: inline-block;
   width: 28%;
-  height: 100%;
 }
 
-.search-footer {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
+.mapcore-search-header {
   margin: 0 5px;
   padding: 8px;
 }
 
-.search-footer p {
+.mapcore-search-footer {
+  position: absolute;
+  margin: 0 5px;
+  padding: 8px;
+  bottom: 0;
+  right: 0;
+  left: 0;
+}
+
+.mapcore-search-footer p {
   text-align: center;
 }
 
-.search-results button {
+.mapcore-search-results button {
    border-radius: 5px;
    display: inline-flex;
    align-items: center;
@@ -48,15 +48,15 @@
   float: right;
 }
 
-.search-footer button {
+.mapcore-search-footer button {
    border-radius: 5px;
 }
 
-.search-footer #mapcore_next_page {
+.mapcore-search-footer #mapcore_next_page {
   margin-left: 2px;
 }
 
-.search-footer #mapcore_prev_page {
+.mapcore-search-footer #mapcore_prev_page {
   margin-right: 2px;
 }
 
@@ -84,7 +84,7 @@
   background-repeat: no-repeat;
 }
 
-.search-footer button:disabled {
+.mapcore-search-footer button:disabled {
   opacity: 0.6;
   cursor: not-allowed;
 }
