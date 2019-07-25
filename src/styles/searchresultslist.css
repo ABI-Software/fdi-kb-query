@@ -78,6 +78,8 @@
 }
 
 .mapcore-footer-icon {
+  display: inline-block;
+  margin-top: 6px;
   height: 1em;
   width: 1em;
   background-position: center;

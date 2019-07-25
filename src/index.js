@@ -188,30 +188,63 @@ const renderDescription = (description, max_length) => {
     return have;
   }
 
-  const renderResult = (element, data) => {
+  const createIconSpan = (span_id) => {
+    let span_element = document.createElement("span");
+    span_element.setAttribute("id", span_id)
+    span_element.classList.add("mapcore-search-icon")
+    span_element.classList.add("mapcore-search-icon-small")
+    return span_element
+  }
+
+  const addIconLinks = (target_element, action_type, resource, supplementary_data) => {
+    target_element.classList.add("cursor-pointer")
+    target_element.onclick = function(event) {
+      let message_data = {action: action_type, resource: resource, data: supplementary_data, sender: 'query-engine'};
+      channel.postMessage(message_data)
+    }
+  }
+
+  const renderResult = (element, data, add_links) => {
     let heading = element.querySelector("#mapcore_search_result_heading_text")
     heading.innerHTML = renderTitle(data['Dataset Title'])
     let paragraph = element.querySelector("#mapcore_search_result_paragraph")
     paragraph.innerHTML = renderDescription(data['Description'])
+    let icons_element = element.querySelector("#mapcore_search_result_icons")
     if (isCuratedData(data)) {
       let target_element = element.querySelector("#mapcore_search_result_curated_data_paragraph")
       target_element.classList.add("hidden")
     }
     if (haveScaffold(data)) {
-      let target_element = element.querySelector("#mapcore_search_result_scaffold_map")
-      target_element.classList.remove("disabled-map")
+      let span_element = createIconSpan("mapcore_search_result_scaffold_map")
+      if (add_links) {
+        let supplementary_data = {'species': data["Scaffold"]["species"], 'organ': data["Scaffold"]["organ"], 'annotation': data["Scaffold"]["annotation"]}
+        addIconLinks(span_element, "scaffold-show", data["Scaffold"]["uri"], supplementary_data)
+      }
+      icons_element.firstElementChild.before(span_element)
     }
     if (haveDataViewer(data)) {
-      let target_element = element.querySelector("#mapcore_search_result_data_viewer_map")
-      target_element.classList.remove("disabled-map")
+      let span_element = createIconSpan("mapcore_search_result_data_viewer_map")
+      if (add_links) {
+        let supplementary_data = {'species': data["DataViewer"]["species"], 'organ': data["DataViewer"]["organ"], 'annotation': data["DataViewer"]["annotation"]}
+        addIconLinks(span_element, "data-viewer-show", data["DataViewer"]["uri"], supplementary_data)
+      }
+      icons_element.firstElementChild.before(span_element)
     }
     if (haveFlatmap(data)) {
-      let target_element = element.querySelector("#mapcore_search_result_flatmap_map")
-      target_element.classList.remove("disabled-map")
+      let span_element = createIconSpan("mapcore_search_result_flatmap_map")
+      if (add_links) {
+        let supplementary_data = {}
+        addIconLinks(span_element, "flatmap-show", "NCBITaxon:9606", supplementary_data)
+      }
+      icons_element.firstElementChild.before(span_element)
     }
     if (haveSimulation(data)) {
-      let target_element = element.querySelector("#mapcore_search_result_simulation_map")
-      target_element.classList.remove("disabled-map")
+      let span_element = createIconSpan("mapcore_search_result_simulation_map")
+      if (add_links) {
+        let supplementary_data = {}
+        addIconLinks(span_element, "simulation-show", data["Simulation"]["uri"], supplementary_data)
+      }
+      icons_element.firstElementChild.before(span_element)
     }
     let image_block = element.querySelector("#mapcore_search_result_image")
     image_block.classList.add("float-left")
@@ -225,17 +258,22 @@ const renderDescription = (description, max_length) => {
 
   const renderFullResult = (parent, data) => {
     let element = this.htmlToElement(require("./snippets/searchresultinfull.html"))
-    renderResult(element, data)
+    renderResult(element, data, true)
     let image_block = element.querySelector("#mapcore_search_result_image")
     image_block.classList.remove("float-left")
     image_block.classList.add("text-center")
+    let icon_elements = element.querySelectorAll(".mapcore-search-icon")
+    icon_elements.forEach(function(element) {
+      element.classList.remove("mapcore-search-icon-small")
+      element.classList.add("mapcore-search-icon-medium")
+    });
 
     parent.appendChild(element)
   }
 
   const renderShortResult = (result_parent, entry_index, data) => {
     let element = this.htmlToElement(require("./snippets/searchresult.html"))
-    renderResult(element, data)
+    renderResult(element, data, false)
     element.setAttribute("entry_index", entry_index.toString())
     element.addEventListener("click", this.resultClicked)
 
