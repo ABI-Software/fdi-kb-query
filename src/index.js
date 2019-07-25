@@ -15,7 +15,8 @@ exports.FDI_KB_Query_Module = function(parent_in)  {
   const per_page = 5;
   const query_context = 'SCR_017041-3';
 
-  const search_alternatives = {HB_155A_3: "UBERON:0000948", HB_155A_4: "UBERON:0000948", HB_100A_2: "UBERON:0000948", HB_155A_1: "UBERON:0000948" }
+  const search_alternatives = ["HB_150A_2", "HB_155A_1", "HB_150A_4", "HB_155A_1", "HB_155A_2", "HB_155A_3",
+     "HB_155A_4", "HB_100A_2", "HB_100A_3", "HB_100A_4", "HB_115B_1", "HB_150A_1", "HB_115B_4", "HB_115B_3", "HB_115B_2"]
 
   let biolucida_client = undefined;
   let pre_packaged_results = undefined;
@@ -488,17 +489,30 @@ const renderDescription = (description, max_length) => {
         let blackfynn_id = data[i]['BlackfynnID']
         if (blackfynn_id.includes('N:organization:618e8dd9-f8d2-4dc4-9abb-c6aaab2e78a0') &&
            blackfynn_id.includes('N:dataset:0170271a-8fac-4769-a8f5-2b9520291d03')) {
-           data[i]['Example Image'] = 'https://sparc.biolucida.net:443/image?c=MTY0LWNvbC0zMi0wLTAtMi0w' //http://sparc.biolucida.net/link?l=vua1n9'
-           data[i]['Scaffold'] = {'uri': 'https://mapcore-bucket1.s3-us-west-2.amazonaws.com/ISAN/scaffold/use_case4/rat_heart_metadata.json', 'species': 'rat', 'organ': 'heart', 'annotation': 'UBERON:0000948'}
-           data[i]['DataViewer'] = {'uri': 'https://mapcore-bucket1.s3-us-west-2.amazonaws.com/ISAN/csv-data/use-case-4/RNA_Seq.csv', 'species': 'rat', 'organ': 'heart', 'annotation': 'UBERON:0000948'}
+           data[i]['Example Image'] = 'https://sparc.biolucida.net:443/image?c=MTA2LWNvbC0zMi0wLTAtMS0w'
+           data[i]['Scaffold'] = {'uri': 'https://mapcore-bucket1.s3-us-west-2.amazonaws.com/ISAN/scaffold/use_case4/rat_heart_metadata.json', 'species': 'Rat', 'organ': 'heart', 'annotation': 'UBERON:0000948'}
+           data[i]['DataViewer'] = {'uri': 'https://mapcore-bucket1.s3-us-west-2.amazonaws.com/ISAN/csv-data/use-case-4/RNA_Seq.csv', 'species': 'Rat', 'organ': 'heart', 'annotation': 'UBERON:0000948'}
            sorted_data.unshift(data[i])
         } else if (blackfynn_id.includes('N:organization:618e8dd9-f8d2-4dc4-9abb-c6aaab2e78a0') &&
-           blackfynn_id.includes('N:dataset:a7b035cf-e30e-48f6-b2ba-b5ee479d4de3')) {
-           data[i]['Scaffold'] = {'uri': 'https://mapcore-bucket1.s3-us-west-2.amazonaws.com/ISAN/scaffold/stomach/stomach_metadata.json', 'species': 'rat', 'organ': 'stomach', 'annotation': 'UBERON:0000945'}
+           blackfynn_id.includes('N:dataset:e19b9b69-6776-427a-92f4-6b03f395d01f')) {
+           data[i]['Example Image'] = 'https://sparc.biolucida.net:443/image?c=MTIxLWNvbC0zMi0wLTAtMS0w'
+           sorted_data.unshift(data[i])
+        } else if (blackfynn_id.includes('N:organization:618e8dd9-f8d2-4dc4-9abb-c6aaab2e78a0') &&
+           blackfynn_id.includes('N:collection:92dab90c-5b45-4e90-8697-4299a40849b2')) {
+           data[i]['Example Image'] = 'https://sparc.biolucida.net:443/image?c=MTA4LWNvbC0zMi0wLTAtMi0w'
+           sorted_data.unshift(data[i])
+        } else if (blackfynn_id.includes('N:organization:618e8dd9-f8d2-4dc4-9abb-c6aaab2e78a0') &&
+           blackfynn_id.includes('N:dataset:5fbf98f1-b908-469a-8d97-913dc1cbd26d')) {
+           data[i]['Example Image'] = 'https://sparc.biolucida.net:443/image?c=MjAwLWNvbC0zMi0wLTAtMS0w'
+           sorted_data.unshift(data[i])
+        } else if (blackfynn_id.includes('N:organization:618e8dd9-f8d2-4dc4-9abb-c6aaab2e78a0') &&
+           blackfynn_id.includes('N:collection:9f088d62-8317-4059-9f99-cb94a69f337b')) {
+           data[i]['Example Image'] = 'https://sparc.biolucida.net:443/image?c=MTIzLWNvbC0zMi0wLTAtMS0w'
            sorted_data.unshift(data[i])
         } else if (blackfynn_id.includes('N:organization:618e8dd9-f8d2-4dc4-9abb-c6aaab2e78a0') &&
            blackfynn_id.includes('N:dataset:e4bfb720-a367-42ab-92dd-31fd7eefb82e')) {
-           data[i]['Example Image'] = 'https://sparc.biolucida.net:443/image?c=MTY0LWNvbC0zMi0wLTAtMi0w' //http://sparc.biolucida.net/link?l=vua1n9'
+           data[i]['Scaffold'] = {'uri': 'https://mapcore-bucket1.s3-us-west-2.amazonaws.com/ISAN/scaffold/stomach/stomach_metadata.json', 'species': 'Rat', 'organ': 'stomach', 'annotation': 'UBERON:0000945'}
+           data[i]['Example Image'] = 'https://sparc.biolucida.net:443/image?c=MTY0LWNvbC0zMi0wLTAtMi0w'
            sorted_data.unshift(data[i])
         } else {
           sorted_data.push(data[i])
@@ -527,6 +541,30 @@ const renderDescription = (description, max_length) => {
       }
     } else if (params.q == 'flatmap') {
       sorted_data = pre_packaged_results.get_flatmap_results()
+    } else if (params.q.includes("8297 V Stom")) {
+      sorted_data = []
+      if (params.q.includes("39.0um")) {
+        sorted_data[0] = {
+          "BlackfynnID": "",
+          "Dataset Title": "3D Mapping and Visualization of 2D Experimental Data Stomach Afferents and Efferents Image 39.0um",
+          "Description": "A statistically representative and anatomically-based 3D scaffold of the rat stomach was created to map 230 nerve ending pathways traced from 68 2D rat stomach whole mounts. Micro-CT image data of 11 animals with an average volume of 9.9cm3 were used to construct this 3D scaffold. Imaging and subsequent data segmentation was performed at the Powley laboratory in Purdue University using MBF bioscience software Neurolucida.",
+          "Example Image": "https://sparc.biolucida.net/image?c=MTY0LWNvbC0zMi0wLTAtMi0w",
+        }
+      } else if (params.q.includes("20um")) {
+        sorted_data[0] = {
+          "BlackfynnID": "",
+          "Dataset Title": "3D Mapping and Visualization of 2D Experimental Data Stomach Afferents and Efferents Image 20um",
+          "Description": "A statistically representative and anatomically-based 3D scaffold of the rat stomach was created to map 230 nerve ending pathways traced from 68 2D rat stomach whole mounts. Micro-CT image data of 11 animals with an average volume of 9.9cm3 were used to construct this 3D scaffold. Imaging and subsequent data segmentation was performed at the Powley laboratory in Purdue University using MBF bioscience software Neurolucida.",
+          "Example Image": "https://sparc.biolucida.net/image?c=MTY1LWNvbC0zMi0wLTAtMi0w",
+        }
+      } else if (params.q.includes("16.0um")) {
+        sorted_data[0] = {
+          "BlackfynnID": "",
+          "Dataset Title": "3D Mapping and Visualization of 2D Experimental Data Stomach Afferents and Efferents Image 16.0um",
+          "Description": "A statistically representative and anatomically-based 3D scaffold of the rat stomach was created to map 230 nerve ending pathways traced from 68 2D rat stomach whole mounts. Micro-CT image data of 11 animals with an average volume of 9.9cm3 were used to construct this 3D scaffold. Imaging and subsequent data segmentation was performed at the Powley laboratory in Purdue University using MBF bioscience software Neurolucida.",
+          "Example Image": "https://sparc.biolucida.net/image?c=MTY2LWNvbC0zMi0wLTAtMS0w",
+        }
+      }
     }
     return sorted_data
   }
@@ -571,6 +609,17 @@ const renderDescription = (description, max_length) => {
     renderSearchResults(current_results, parseInt(event.currentTarget.getAttribute("page_number")));
   }
 
+  const isKnownSearchTermNotInKnowledgeBase = (term) => {
+    let is_not_in = false
+    if (term == "flatmap") {
+      is_not_in = true
+    } else if (term.includes("8297 V Stom")) {
+      is_not_in = true
+    }
+
+    return is_not_in
+  }
+
  /**
   * @param {String} HTML representing a single element
   * @return {Element}
@@ -590,11 +639,12 @@ const renderDescription = (description, max_length) => {
 	    parseString(response.data, function (err, result) {
 	      if (result != undefined) {
             let data = jsonifyResults(result.responseWrapper.result[0].results[0].row);
-            if (data == undefined && query_params.q != 'flatmap') {
+            if (data == undefined && !isKnownSearchTermNotInKnowledgeBase(query_params.q)) {
               tooltip_element = parent.querySelector("#mapcore_search_input_tooltip")
               tooltip_element.classList.add("show")
               setTimeout(function(){ tooltip_element.classList.remove("show"); }, 3000);
             } else {
+            console.log(data)
               current_results = augmentResults(data, query_params)
               renderSearchResults(current_results, 1);
             }
@@ -612,8 +662,8 @@ const renderDescription = (description, max_length) => {
   const doQuery = () => {
     let search_input = parent.querySelector("#mapcore_search_input");
     let search_term = search_input.value
-    if (search_input.value in search_alternatives) {
-      search_term = search_alternatives[search_input.value]
+    if (search_alternatives.indexOf(search_input.value) > -1) {
+      search_term = "UBERON:0000948"
     }
     this.query(query_context, {q:search_term})
   }

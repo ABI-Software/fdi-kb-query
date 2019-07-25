@@ -9,8 +9,8 @@
 }
 
 .search-result-in-full img {
-    width: auto;
-    height: auto;
+    width: 200px;
+    height: 200px;
 }
 
 .search-result-in-full .description {
