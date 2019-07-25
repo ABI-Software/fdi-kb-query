@@ -46,10 +46,6 @@
   left: 0%;
 }
 
-.show {
-  visibility: visible;
-}
-
 .mapcore-no-results-tooltip::after {
   content: "";
   position: absolute;

@@ -6,10 +6,6 @@
     margin: 2px 0;
 }
 
-.float-left {
-  float: left;
-}
-
 #mapcore_search_result_heading {
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -108,26 +104,3 @@
  .cursor-pointer {
   cursor: pointer;
 }
-
-.overlay {
-    top: 20%;
-    left: 24%;
-    width: 30%;
-    height: 60%;
-    display: none;
-    position: fixed;
-    z-index: 1000000;
-}
-
-.search-result:hover .overlay {
-  display: block;
-  background-color: #e6f0ff;
-  padding: 4px;
-  border: 2px solid;
-}
-
-/*
-#search_result_overlay:focus {
-  display: none;
-}
-*/

@@ -3,10 +3,11 @@ const biolucidaclient_module = require('@abi-software/biolucidaclient').biolucid
 const prepackagedresults_module = require('@abi-software/mapcore-pre-packaged-results').mapcore_pre_packaged_results_module
 const augmentedresults_module = require('@abi-software/mapcore-augmented-results').mapcore_augmented_results_module
 const parseString = require('xml2js').parseString;
+require("./styles/searchcommon.css");
 require("./styles/searchwidget.css");
+require("./styles/searchresultsdiv.css");
 require("./styles/searchresultslist.css");
 require("./styles/searchresult.css");
-require("./styles/searchdiv.css");
 
 exports.FDI_KB_Query_Module = function(parent_in)  {
   const kb_endpoint = "knowledgebase/"
@@ -20,7 +21,7 @@ exports.FDI_KB_Query_Module = function(parent_in)  {
   let pre_packaged_results = undefined;
   let augmented_results = undefined;
   let channel = undefined;
-  let search_results = undefined;
+  let current_results = undefined;
 
   const paginator = (items, page, per_page) => {
 
@@ -187,8 +188,7 @@ if (max_length == undefined) {
     return have;
   }
 
-  const renderResult = (result_parent, data) => {
-    let element = this.htmlToElement(require("./snippets/searchresult.html"))
+  const renderResult = (element, data) => {
     let heading = element.querySelector("#mapcore_search_result_heading_text")
     heading.innerHTML = renderTitle(data['Dataset Title'])
     let paragraph = element.querySelector("#mapcore_search_result_paragraph")
@@ -221,8 +221,21 @@ if (max_length == undefined) {
       image_block.classList.remove('hidden')
       biolucida_client.get_thumbnail(image, img_id)
     }
-    let overlay_element = element.querySelector('#search_result_overlay')
-    renderOverlayResult(overlay_element, data)
+  }
+
+  const renderFullResult = (parent, data) => {
+    let element = this.htmlToElement(require("./snippets/resultinfull.html"))
+    renderResult(element, data)
+
+    parent.appendChild(element)
+  }
+
+  const renderShortResult = (result_parent, entry_index, data) => {
+    let element = this.htmlToElement(require("./snippets/searchresult.html"))
+    renderResult(element, data)
+    element.setAttribute("entry_index", entry_index.toString())
+    element.addEventListener("click", this.resultClicked)
+
     result_parent.appendChild(element)
   }
 
@@ -252,28 +265,82 @@ if (max_length == undefined) {
     footer_parent.appendChild(element)
   }
 
-  const renderHeader = (header_parent) => {
+  const renderHeader = (header_parent, clearable) => {
     let element = this.htmlToElement(require("./snippets/searchheader.html"))
     let clear_element = element.querySelector("#mapcore_search_header_clear")
-    clear_element.addEventListener("click", this.clearResults)
+    if (clearable) {
+      clear_element.addEventListener("click", this.clearSearchResults)
+    } else {
+      clear_element.classList.add("hidden")
+    }
     header_parent.firstElementChild.before(element)
   }
 
-  const renderResults = (data, page_number) => {
-      this.clearResults(true)
-	  if (data) {
-	    paged_data = paginator(data, page_number, per_page)
-	    let search_container_element = parent.querySelector('#mapcore_search_results_container')
-	    renderHeader(search_container_element)
+  const renderFullResultHeader = () => {
+    let search_container_element = parent.querySelector('#mapcore_search_results_container')
+    let element = this.htmlToElement(require("./snippets/searchheader.html"))
+    let clear_element = element.querySelector("#mapcore_search_header_clear")
+    clear_element.addEventListener("click", this.clearFullSearchResult)
+    let search_results_element = element.querySelector('#mapcore_search_header_text')
+    search_results_element.innerHTML = ""
+    search_container_element.firstElementChild.before(element)
+  }
 
-	    let search_results_element = parent.querySelector('#mapcore_search_results_list')
-	    for (let i=0; i < paged_data.data.length; i++) {
-          renderResult(search_results_element, paged_data.data[i])
-	    }
+  const renderResults = (paged_data, page_number) => {
+    clearSearchResultsList()
+    let search_results_element = parent.querySelector('#mapcore_search_results_list')
+    for (let i=0; i < paged_data.data.length; i++) {
+      renderShortResult(search_results_element, (page_number - 1) * paged_data.per_page + i, paged_data.data[i])
+    }
+  }
 
-	    renderFooter(search_container_element, paged_data)
-	    showSearchResults(true)
-	  }
+  const prepareHeader = (clearable) => {
+    clearHeader()
+    let search_container_element = parent.querySelector('#mapcore_search_results_container')
+    renderHeader(search_container_element, clearable)
+  }
+  
+  const prepareFooter = (paged_data, visible) => {
+    clearFooter()
+    let search_container_element = parent.querySelector('#mapcore_search_results_container')
+    renderFooter(search_container_element, paged_data)
+  }
+
+  const renderSearchResults = (data, page_number) => {
+    setSearchResultsActive()
+    storePageNumber(page_number, "search")
+    paged_data = paginator(data, page_number, per_page)
+    prepareHeader(true)
+    renderResults(paged_data, page_number)
+    prepareFooter(paged_data)
+  }
+
+  const renderStartingResults = (data, page_number) => {
+    storePageNumber(page_number, "starting")
+    paged_data = paginator(data, page_number, per_page)
+    prepareHeader(false)
+    renderResults(paged_data, page_number)
+    prepareFooter(paged_data)
+  }
+
+  const storePageNumber = (page_number, variant) => {
+    let search_container_element = parent.querySelector('#mapcore_search_results_container')
+    search_container_element.setAttribute("page_number" + "_" + variant, page_number.toString())
+  }
+
+  const retrievePageNumber = (variant) => {
+    let search_container_element = parent.querySelector('#mapcore_search_results_container')
+    return parseInt(search_container_element.getAttribute("page_number" + "_" + variant))
+  }
+
+  const setSearchResultsActive = () => {
+    let search_container_element = parent.querySelector('#mapcore_search_results_container')
+    search_container_element.setAttribute("search_results", "active")
+  }
+
+  const getSearchResultsActive = () => {
+    let search_container_element = parent.querySelector('#mapcore_search_results_container')
+    return search_container_element.getAttribute("search_results") === "active"
   }
 
   const setElementClass = (element, state, css_class) => {
@@ -284,37 +351,62 @@ if (max_length == undefined) {
     }
   }
 
-  const showSearchResults = (state) => {
-//    let elements = parent.querySelectorAll('.maptab-tab-content')
-//    elements.forEach( function (element) {
-//      setElementClass(element, state, "margin-left-26")
-//    })
-//    let search_results_element = parent.querySelector("#mapcore_search_results_container")
-//    setElementClass(search_results_element, !state, "zero-width")
-//    let search_widget_element = parent.querySelector("#mapcore_search_widget")
-//    setElementClass(search_widget_element, state, "margin-right-8")
+  this.resultClicked = (event) => {
+    let entry_index = parseInt(event.currentTarget.getAttribute("entry_index"))
+    let search_results_element = parent.querySelector('#mapcore_search_results_list')
+
+    clearHeader()
+    renderFullResultHeader()
+    clearSearchResultsList()
+    renderFullResult(search_results_element, current_results[entry_index])
+
+    let container_element = parent.querySelector('#mapcore_search_results_container')
+    let footer_element = container_element.querySelector(".mapcore-search-footer")
+    footer_element.classList.add("hide")
   }
 
-  this.clearResults = (soft_clear) => {
-    if (soft_clear !== true) {
-      showSearchResults(false)
-    }
+  const clearSearchResultsList = () => {
     let search_results_element = parent.querySelector('#mapcore_search_results_list')
     let child = search_results_element.lastElementChild;
     while (child) {
       search_results_element.removeChild(child);
       child = search_results_element.lastElementChild;
     }
+  }
 
+  const clearFooter = () => {
+    let container_element = parent.querySelector("#mapcore_search_results_container")
+    let footer_element = container_element.querySelector(".mapcore-search-footer")
+    if (footer_element != undefined) {
+      container_element.removeChild(footer_element)
+    }
+  }
+
+  const clearHeader = () => {
     let container_element = parent.querySelector("#mapcore_search_results_container")
     let header_element = container_element.querySelector(".mapcore-search-header")
     if (header_element != undefined) {
       container_element.removeChild(header_element)
     }
-    let footer_element = container_element.querySelector(".mapcore-search-footer")
-    if (footer_element != undefined) {
-      container_element.removeChild(footer_element)
+  }
+
+  this.clearFullSearchResult = () => {
+    let active_search_results = getSearchResultsActive()
+    if (active_search_results) {
+      renderSearchResults(current_results, retrievePageNumber("search"))
+    } else {
+      renderStartingResults(current_results, retrievePageNumber("starting"))
     }
+  }
+
+  this.clearSearchResults = () => {
+    let page_number = retrievePageNumber("starting")
+    current_results = prepackagedresults.get_results()
+    renderStartingResults(current_results, page_number)
+  }
+
+  this.clearResults = () => {
+    clearSearchResultsList()
   }
 
   const augmentResults = (data, params) => {
@@ -397,7 +489,7 @@ if (max_length == undefined) {
   }
 
   this.onPageChange = (event) => {
-    renderResults(search_results, parseInt(event.currentTarget.getAttribute("page_number")));
+    renderSearchResults(current_results, parseInt(event.currentTarget.getAttribute("page_number")));
   }
 
  /**
@@ -424,8 +516,8 @@ if (max_length == undefined) {
               tooltip_element.classList.add("show")
               setTimeout(function(){ tooltip_element.classList.remove("show"); }, 3000);
             } else {
-              search_results = augmentResults(data, query_params)
-              renderResults(search_results, 1);
+              current_results = augmentResults(data, query_params)
+              renderSearchResults(current_results, 1);
             }
 	      }
 	    });
@@ -455,20 +547,8 @@ if (max_length == undefined) {
     }
   }
 
-  const setupSearchWidget = (container) => {
-    container.insertBefore(this.htmlToElement(require("./snippets/searchwidget.html")), container.childNodes[0])
-    let search_form = container.querySelector("#mapcore_search_form");
-    if (search_form) {
-      search_form.addEventListener("reset", this.clearResults);
-      search_form.addEventListener("submit", event => {
-        event.preventDefault()
-        doQuery()
-      })
-    }
-  }
-
-  const setupSearchDiv = (container) => {
-    container.firstElementChild.after(this.htmlToElement(require("./snippets/searchdiv.html")))
+  const setupSearchResultsDiv = (container) => {
+    container.firstElementChild.after(this.htmlToElement(require("./snippets/searchresultsdiv.html")))
     let search_form = container.querySelector(".mapcore-search-form");
     if (search_form) {
       search_form.addEventListener("reset", this.clearResults);
@@ -491,9 +571,11 @@ if (max_length == undefined) {
     channel = new (require('broadcast-channel').default)('sparc-mapcore-channel');
     channel.onmessage = this.broadcastCallback
 
-    setupSearchDiv(parent);
+    setupSearchResultsDiv(parent);
     let mapcore_content_panel_element = parent.querySelector("#mapcore_content_panel")
     setupSearchResults(mapcore_content_panel_element);
+    current_results = prepackagedresults.get_results()
+    renderStartingResults(current_results, 1)
   }
 
   initialise();
