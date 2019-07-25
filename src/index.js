@@ -273,7 +273,7 @@ const renderDescription = (description, max_length) => {
 
   const renderShortResult = (result_parent, entry_index, data) => {
     let element = this.htmlToElement(require("./snippets/searchresult.html"))
-    renderResult(element, data, false)
+    renderResult(element, data, true)
     element.setAttribute("entry_index", entry_index.toString())
     element.addEventListener("click", this.resultClicked)
 
