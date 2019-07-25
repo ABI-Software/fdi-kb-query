@@ -42,7 +42,7 @@ exports.FDI_KB_Query_Module = function(parent_in)  {
     };
   }
 
-const renderTitle = (title, overlay) => {
+const renderTitle = (title, link) => {
   var return_title = undefined
   var title_text = title.substring(0, title.indexOf("<a"))
   if (title_text == "") {
@@ -51,11 +51,10 @@ const renderTitle = (title, overlay) => {
   title_text = title_text.replace(/_/g, " ")
 
   var link_text = title.substring(title.indexOf("<a"))
-  var actual_title = link_text.replace("Link", title_text)
-  if (overlay == undefined) {
-    return_title = title_text
+  if (link) {
+    return_title = '<a class="external" target="_blank" href="' + link + '">' + title_text + '</a>'
   } else {
-    return_title = actual_title
+    return_title = title_text
   }
 
   return return_title
@@ -150,9 +149,12 @@ const renderDescription = (description, max_length) => {
 
   const isCuratedData = (data) => {
     let curated = false;
-    if ("Dataset Title" in data && data["Dataset Title"].includes("blackfynn")) {
+    if ("Dataset Status" in data && data["Dataset Status"] == "released") {
+      curated = true;
+    } else if ("Dataset Status" in data && data["Dataset Status"] == "embargoed") {
       curated = true;
     }
+
     return curated
   }
 
@@ -222,7 +224,7 @@ const renderDescription = (description, max_length) => {
 
   const renderResult = (element, data, add_links) => {
     let heading = element.querySelector("#mapcore_search_result_heading_text")
-    heading.innerHTML = renderTitle(data['Dataset Title'])
+    heading.innerHTML = renderTitle(data['Dataset Title'], data['Links'])
     let paragraph = element.querySelector("#mapcore_search_result_paragraph")
     paragraph.innerHTML = renderDescription(data['Description'])
     let icons_element = element.querySelector("#mapcore_search_result_icons")
@@ -471,7 +473,7 @@ const renderDescription = (description, max_length) => {
   this.clearSearchResults = () => {
     setSearchResultsInActive()
     let page_number = retrievePageNumber("starting")
-    current_results = prepackagedresults.get_results()
+    current_results = pre_packaged_results.get_results()
     renderStartingResults(current_results, page_number)
   }
 
@@ -480,6 +482,7 @@ const renderDescription = (description, max_length) => {
   }
 
   const augmentResults = (data, params) => {
+    sorted_data = []
     if (data) {
       for (let i = 0; i < data.length; i++) { //https://app.blackfynn.io/N:organization:618e8dd9-f8d2-4dc4-9abb-c6aaab2e78a0/datasets/N:dataset:0170271a-8fac-4769-a8f5-2b9520291d03
         let blackfynn_id = data[i]['BlackfynnID']
@@ -488,38 +491,44 @@ const renderDescription = (description, max_length) => {
            data[i]['Example Image'] = 'https://sparc.biolucida.net:443/image?c=MTY0LWNvbC0zMi0wLTAtMi0w' //http://sparc.biolucida.net/link?l=vua1n9'
            data[i]['Scaffold'] = {'uri': 'https://mapcore-bucket1.s3-us-west-2.amazonaws.com/ISAN/scaffold/use_case4/rat_heart_metadata.json', 'species': 'rat', 'organ': 'heart', 'annotation': 'UBERON:0000948'}
            data[i]['DataViewer'] = {'uri': 'https://mapcore-bucket1.s3-us-west-2.amazonaws.com/ISAN/csv-data/use-case-4/RNA_Seq.csv', 'species': 'rat', 'organ': 'heart', 'annotation': 'UBERON:0000948'}
+           sorted_data.unshift(data[i])
         } else if (blackfynn_id.includes('N:organization:618e8dd9-f8d2-4dc4-9abb-c6aaab2e78a0') &&
            blackfynn_id.includes('N:dataset:a7b035cf-e30e-48f6-b2ba-b5ee479d4de3')) {
            data[i]['Scaffold'] = {'uri': 'https://mapcore-bucket1.s3-us-west-2.amazonaws.com/ISAN/scaffold/stomach/stomach_metadata.json', 'species': 'rat', 'organ': 'stomach', 'annotation': 'UBERON:0000945'}
+           sorted_data.unshift(data[i])
         } else if (blackfynn_id.includes('N:organization:618e8dd9-f8d2-4dc4-9abb-c6aaab2e78a0') &&
            blackfynn_id.includes('N:dataset:e4bfb720-a367-42ab-92dd-31fd7eefb82e')) {
            data[i]['Example Image'] = 'https://sparc.biolucida.net:443/image?c=MTY0LWNvbC0zMi0wLTAtMi0w' //http://sparc.biolucida.net/link?l=vua1n9'
+           sorted_data.unshift(data[i])
+        } else {
+          sorted_data.push(data[i])
         }
       }
-      if (params.q.toUpperCase() === "HEART" || params.q === "UBERON:0000948") {
-        data.push({"Dataset Title": "Autonomic Nerve Stimulation Simulation", "Description": "This data links to a simulation experiment of the autonomic nerves innervating the heart.",
+      if (params.q.toUpperCase().includes("HEART") || params.q === "UBERON:0000948") {
+        sorted_data.unshift({"Dataset Title": "Autonomic Nerve Stimulation Simulation", "Description": "This data links to a simulation experiment of the autonomic nerves innervating the heart.",
          "Example Image": "", "Simulation": {"uri": "https://osparc.io/study/194bb264-a717-11e9-9dff-02420aff2767", 'species': 'Human', 'organ': 'heart', 'annotation': 'UBERON:0000948'}}
         )
-      } else if (params.q.toUpperCase() === "STELLATE" || params.q === "UBERON:0002440") {
-        data.push({"Dataset Title": "Mouse Stellate Ganglion", "Description": "Data from the Shivkumar/Tompkins group displayed in a 3D stellate scaffold.",
+      }
+      if (params.q.toUpperCase().includes("STELLATE") || params.q === "UBERON:0002440") {
+        sorted_data.unshift({"Dataset Title": "Mouse Stellate Ganglion", "Description": "Data from the Shivkumar/Tompkins group displayed in a 3D stellate scaffold.",
           "Example Image": "", "Scaffold": {"uri": "https://mapcore-bucket1.s3-us-west-2.amazonaws.com/ISAN/scaffold/stellate/stellate_metadata.json", 'species': 'Mouse', 'organ': 'nerve', 'annotation': 'UBERON:0002440'},
           "DataViewer": {"uri": "https://mapcore-bucket1.s3-us-west-2.amazonaws.com/ISAN/csv-data/use-case-2/Sample_1_18907001_channel_1.csv", 'species': 'Mouse', 'organ': 'nerve', 'annotation': 'UBERON:0002440'}}
         )
-      } else if (params.q.toUpperCase().includes("LUNG") || params.q === "UBERON:0002048") {
-        data.push({"Dataset Title": "Data for Mouse Lungs", "Description": "Data from Tom Taylor-Clark visualised on a 3D scaffold with electrophysiclogical data.",
+      }
+      if (params.q.toUpperCase().includes("LUNG") || params.q === "UBERON:0002048") {
+        sorted_data.unshift({"Dataset Title": "Data for Mouse Lungs", "Description": "Data from Tom Taylor-Clark visualised on a 3D scaffold with electrophysiclogical data.",
           "Example Image": "", "Scaffold": {"uri": "https://mapcore-bucket1.s3-us-west-2.amazonaws.com/ISAN/scaffold/lungs/lungs_metadata.json", 'species': 'Mouse', 'organ': 'lung', 'annotation': 'UBERON:0002048'}}
         )
-      }  else if (params.q.toUpperCase().includes("COLON") || params.q === "UBERON:0001155") {
-        data.push({"Dataset Title": "Mouse Colon Data", "Description": "Data from the Howard & Tache groups where a 3D scaffold fitted to these data will be visualised on a 3D scaffold.",
+      }
+      if (params.q.toUpperCase().includes("COLON") || params.q === "UBERON:0001155") {
+        sorted_data.unshift({"Dataset Title": "Mouse Colon Data", "Description": "Data from the Howard & Tache groups where a 3D scaffold fitted to these data will be visualised on a 3D scaffold.",
           "Example Image": "", "Scaffold": {"uri": "https://mapcore-bucket1.s3-us-west-2.amazonaws.com/ISAN/scaffold/colon/colon_metadata.json", 'species': 'Mouse', 'organ': 'colon', 'annotation': 'UBERON:0001155'}}
         )
       }
     } else if (params.q == 'flatmap') {
-      data = []
-      data[0] = {"Dataset Title": "Human Flatmap", "Description": "This dataset holds a description of a flatmap representation of the major human organs.",
-         "Example Image": "", "Species": "NCBITaxon:9606"}
+      sorted_data = pre_packaged_results.get_flatmap_results()
     }
-    return data
+    return sorted_data
   }
 
   const ObjToSource=(o)=> {
@@ -581,7 +590,7 @@ const renderDescription = (description, max_length) => {
 	    parseString(response.data, function (err, result) {
 	      if (result != undefined) {
             let data = jsonifyResults(result.responseWrapper.result[0].results[0].row);
-            if (data == undefined) {
+            if (data == undefined && query_params.q != 'flatmap') {
               tooltip_element = parent.querySelector("#mapcore_search_input_tooltip")
               tooltip_element.classList.add("show")
               setTimeout(function(){ tooltip_element.classList.remove("show"); }, 3000);
@@ -636,7 +645,7 @@ const renderDescription = (description, max_length) => {
   const initialise = () => {
     // Add my snippet for the query dialog to the parent element.
     biolucida_client = new biolucidaclient_module();
-    prepackagedresults = new prepackagedresults_module();
+    pre_packaged_results = new prepackagedresults_module();
     augmented_results = new augmentedresults_module();
     channel = new (require('broadcast-channel').default)('sparc-mapcore-channel');
     channel.onmessage = this.broadcastCallback
@@ -644,7 +653,7 @@ const renderDescription = (description, max_length) => {
     setupSearchWidget(parent);
     let mapcore_content_panel_element = parent.querySelector("#mapcore_content_panel")
     setupSearchResults(mapcore_content_panel_element);
-    current_results = prepackagedresults.get_results()
+    current_results = pre_packaged_results.get_results()
     renderStartingResults(current_results, 1)
   }
 
