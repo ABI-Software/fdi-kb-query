@@ -174,7 +174,7 @@ const renderDescription = (description, max_length) => {
 
   const haveFlatmap = (data) => {
     let have = false;
-    if ("Species" in data && data["Species"].includes("NCBITaxon:9606")) {
+    if ("Species" in data && data["Species"].includes("NCBITaxon")) {
       have = true;
     }
     return have;
@@ -186,6 +186,22 @@ const renderDescription = (description, max_length) => {
       have = true;
     }
     return have;
+  }
+
+  const haveImage = (data) => {
+    let have = false;
+    if ("Example Image" in data && data["Example Image"]) {
+      have = true
+    }
+    return have;
+  }
+
+  const getImageId = (image_uri) => {
+    let params = (new URL(image_uri)).searchParams
+    let encoded_parameter = params.get('c')
+    let parameter = atob(encoded_parameter)
+    let parts = parameter.split("-")
+    return parts[0]
   }
 
   const createIconSpan = (span_id) => {
@@ -234,7 +250,7 @@ const renderDescription = (description, max_length) => {
       let span_element = createIconSpan("mapcore_search_result_flatmap_map")
       if (add_links) {
         let supplementary_data = {}
-        addIconLinks(span_element, "flatmap-show", "NCBITaxon:9606", supplementary_data)
+        addIconLinks(span_element, "flatmap-show", data["Species"], supplementary_data)
       }
       icons_element.firstElementChild.before(span_element)
     }
@@ -246,13 +262,20 @@ const renderDescription = (description, max_length) => {
       }
       icons_element.firstElementChild.before(span_element)
     }
-    let image_block = element.querySelector("#mapcore_search_result_image")
-    image_block.classList.add("float-left")
-    let img_id = data['Example Image']
-    if (img_id) {
-      let image = element.querySelector("#mapcore_search_result_thumbnail")
+    if (haveImage(data)) {
+      let image_block = element.querySelector("#mapcore_search_result_image")
+      image_block.classList.add("float-left")
       image_block.classList.remove('off')
+      let img_id = getImageId(data["Example Image"])
+      let image = element.querySelector("#mapcore_search_result_thumbnail")
       biolucida_client.get_thumbnail(image, img_id)
+      let span_element = createIconSpan("mapcore_search_result_image_map")
+      if (add_links) {
+        let supplementary_data = {}
+        addIconLinks(span_element, "image-show", data["Example Image"], supplementary_data)
+        addIconLinks(image, "image-show", data["Example Image"], supplementary_data)
+      }
+      icons_element.firstElementChild.before(span_element)
     }
   }
 
@@ -462,7 +485,7 @@ const renderDescription = (description, max_length) => {
         let blackfynn_id = data[i]['BlackfynnID']
         if (blackfynn_id.includes('N:organization:618e8dd9-f8d2-4dc4-9abb-c6aaab2e78a0') &&
            blackfynn_id.includes('N:dataset:0170271a-8fac-4769-a8f5-2b9520291d03')) {
-           data[i]['Example Image'] = '106' //http://sparc.biolucida.net/link?l=vua1n9'
+           data[i]['Example Image'] = 'https://sparc.biolucida.net:443/image?c=MTY0LWNvbC0zMi0wLTAtMi0w' //http://sparc.biolucida.net/link?l=vua1n9'
            data[i]['Scaffold'] = {'uri': 'https://mapcore-bucket1.s3-us-west-2.amazonaws.com/ISAN/scaffold/use_case4/rat_heart_metadata.json', 'species': 'rat', 'organ': 'heart', 'annotation': 'UBERON:0000948'}
            data[i]['DataViewer'] = {'uri': 'https://mapcore-bucket1.s3-us-west-2.amazonaws.com/ISAN/csv-data/use-case-4/RNA_Seq.csv', 'species': 'rat', 'organ': 'heart', 'annotation': 'UBERON:0000948'}
         } else if (blackfynn_id.includes('N:organization:618e8dd9-f8d2-4dc4-9abb-c6aaab2e78a0') &&
@@ -470,7 +493,7 @@ const renderDescription = (description, max_length) => {
            data[i]['Scaffold'] = {'uri': 'https://mapcore-bucket1.s3-us-west-2.amazonaws.com/ISAN/scaffold/stomach/stomach_metadata.json', 'species': 'rat', 'organ': 'stomach', 'annotation': 'UBERON:0000945'}
         } else if (blackfynn_id.includes('N:organization:618e8dd9-f8d2-4dc4-9abb-c6aaab2e78a0') &&
            blackfynn_id.includes('N:dataset:e4bfb720-a367-42ab-92dd-31fd7eefb82e')) {
-           data[i]['Example Image'] = '164' //http://sparc.biolucida.net/link?l=vua1n9'
+           data[i]['Example Image'] = 'https://sparc.biolucida.net:443/image?c=MTY0LWNvbC0zMi0wLTAtMi0w' //http://sparc.biolucida.net/link?l=vua1n9'
         }
       }
       if (params.q.toUpperCase() === "HEART" || params.q === "UBERON:0000948") {
