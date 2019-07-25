@@ -1,9 +1,15 @@
 .search-result {
   position: relative;
-    background-color: white;
-    border: 1px solid;
-    border-radius: 7px;
-    margin: 2px 0;
+  background-color: white;
+  border: 1px solid;
+  border-radius: 7px;
+  margin: 2px 0;
+  padding: 3px;
+}
+
+.search-result:hover {
+  background-color: #aaa;
+  cursor: pointer;
 }
 
 #mapcore_search_result_heading {

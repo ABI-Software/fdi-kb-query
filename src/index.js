@@ -3,11 +3,11 @@ const biolucidaclient_module = require('@abi-software/biolucidaclient').biolucid
 const prepackagedresults_module = require('@abi-software/mapcore-pre-packaged-results').mapcore_pre_packaged_results_module
 const augmentedresults_module = require('@abi-software/mapcore-augmented-results').mapcore_augmented_results_module
 const parseString = require('xml2js').parseString;
-require("./styles/searchcommon.css");
 require("./styles/searchwidget.css");
-require("./styles/searchresultsdiv.css");
 require("./styles/searchresultslist.css");
 require("./styles/searchresult.css");
+require("./styles/searchresultinfull.css");
+require("./styles/searchcommon.css");
 
 exports.FDI_KB_Query_Module = function(parent_in)  {
   const kb_endpoint = "knowledgebase/"
@@ -43,34 +43,34 @@ exports.FDI_KB_Query_Module = function(parent_in)  {
   }
 
 const renderTitle = (title, overlay) => {
-var return_title = undefined
-var title_text = title.substring(0, title.indexOf("<a"))
-if (title_text == "") {
-  title_text = title
-}
-title_text = title_text.replace(/_/g, " ")
+  var return_title = undefined
+  var title_text = title.substring(0, title.indexOf("<a"))
+  if (title_text == "") {
+    title_text = title
+  }
+  title_text = title_text.replace(/_/g, " ")
 
-var link_text = title.substring(title.indexOf("<a"))
-var actual_title = link_text.replace("Link", title_text)
-if (overlay == undefined) {
-  return_title = title_text
-} else {
-  return_title = actual_title
-}
+  var link_text = title.substring(title.indexOf("<a"))
+  var actual_title = link_text.replace("Link", title_text)
+  if (overlay == undefined) {
+    return_title = title_text
+  } else {
+    return_title = actual_title
+  }
 
-return return_title
+  return return_title
 }
 
 const renderDescription = (description, max_length) => {
-if (max_length == undefined) {
-  max_length = 100
-}
+  if (max_length == undefined) {
+    max_length = 1000
+  }
 
   var trimmed_description = description.length < max_length ?
-          description :
-          description.substring(0, max_length - 3) + "..."
+        description :
+        description.substring(0, max_length - 3) + "..."
 
-   return trimmed_description
+  return trimmed_description
 }
 
   const renderOverlayResult = (overlay_parent, data) => {
@@ -141,7 +141,7 @@ if (max_length == undefined) {
     let img_id = data['Example Image']
     if (img_id) {
       let image = element.querySelector("#mapcore_search_result_thumbnail")
-      image_block.classList.remove('hidden')
+      image_block.classList.remove('off')
       biolucida_client.get_thumbnail(image, img_id)
     }
 
@@ -218,14 +218,17 @@ if (max_length == undefined) {
     let img_id = data['Example Image']
     if (img_id) {
       let image = element.querySelector("#mapcore_search_result_thumbnail")
-      image_block.classList.remove('hidden')
+      image_block.classList.remove('off')
       biolucida_client.get_thumbnail(image, img_id)
     }
   }
 
   const renderFullResult = (parent, data) => {
-    let element = this.htmlToElement(require("./snippets/resultinfull.html"))
+    let element = this.htmlToElement(require("./snippets/searchresultinfull.html"))
     renderResult(element, data)
+    let image_block = element.querySelector("#mapcore_search_result_image")
+    image_block.classList.remove("float-left")
+    image_block.classList.add("text-center")
 
     parent.appendChild(element)
   }
@@ -338,6 +341,11 @@ if (max_length == undefined) {
     search_container_element.setAttribute("search_results", "active")
   }
 
+  const setSearchResultsInActive = () => {
+    let search_container_element = parent.querySelector('#mapcore_search_results_container')
+    search_container_element.removeAttribute("search_results")
+  }
+
   const getSearchResultsActive = () => {
     let search_container_element = parent.querySelector('#mapcore_search_results_container')
     return search_container_element.getAttribute("search_results") === "active"
@@ -362,7 +370,7 @@ if (max_length == undefined) {
 
     let container_element = parent.querySelector('#mapcore_search_results_container')
     let footer_element = container_element.querySelector(".mapcore-search-footer")
-    footer_element.classList.add("hide")
+    footer_element.classList.add("hidden")
   }
 
   const clearSearchResultsList = () => {
@@ -400,6 +408,7 @@ if (max_length == undefined) {
   }
 
   this.clearSearchResults = () => {
+    setSearchResultsInActive()
     let page_number = retrievePageNumber("starting")
     current_results = prepackagedresults.get_results()
     renderStartingResults(current_results, page_number)
@@ -547,8 +556,8 @@ if (max_length == undefined) {
     }
   }
 
-  const setupSearchResultsDiv = (container) => {
-    container.firstElementChild.after(this.htmlToElement(require("./snippets/searchresultsdiv.html")))
+  const setupSearchWidget = (container) => {
+    container.firstElementChild.after(this.htmlToElement(require("./snippets/searchwidget.html")))
     let search_form = container.querySelector(".mapcore-search-form");
     if (search_form) {
       search_form.addEventListener("reset", this.clearResults);
@@ -571,7 +580,7 @@ if (max_length == undefined) {
     channel = new (require('broadcast-channel').default)('sparc-mapcore-channel');
     channel.onmessage = this.broadcastCallback
 
-    setupSearchResultsDiv(parent);
+    setupSearchWidget(parent);
     let mapcore_content_panel_element = parent.querySelector("#mapcore_content_panel")
     setupSearchResults(mapcore_content_panel_element);
     current_results = prepackagedresults.get_results()

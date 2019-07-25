@@ -1,5 +1,11 @@
-<div id="mapcore_search_widget">
-  <form role="search" method="get" id="mapcore_search_form" class="search-form">
-    <input type="search" required="" name="s" id="mapcore_search_input" class="search-field" placeholder="Search ..." value=""><button id="mapcore_search_form_clear" class="close-icon" type="reset"></button><button type="submit" class="button-search"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 161.72 162.01"><defs><linearGradient id="a" x1="883.96" y1="328.52" x2="1044.68" y2="328.52" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#1906cc"/><stop offset="0.51" stop-color="#8300bf"/><stop offset="1" stop-color="#ff003d"/></linearGradient></defs><title>search-icon</title><path d="M949,248c-35.9,0-65,29.5-65,65.88s29.14,67.65,65,65.87a75.16,75.16,0,0,0,40-13.94s0,3.1,0,4.35a6.66,6.66,0,0,0,1.38,3.9c2.93,4.3,31.54,31.14,33.79,33.35,1.67,1.65,5.84,2.52,8.44.13,2-1.82,6.84-6.64,11.18-11.29,1.75-1.87.78-6.36-.79-7.94-6.13-6.19-31.73-31.67-32.54-32.41a8.82,8.82,0,0,0-4-2.08c-.68-.1-5.34-.53-5.34-.53s13.89-20.12,12.91-39.41C1012.1,277.55,984.86,248,949,248Zm-.5,106.42c-22.37,0-40.5-18.38-40.5-41.05s18.13-41,40.5-41,40.5,18.37,40.5,41S970.83,354.43,948.46,354.43Z" transform="translate(-883.46 -247.51)" style="stroke:#000;stroke-miterlimit:10;fill:url(#a)"/></svg></button>
+<div id="map_search_widget_container">
+  <form class="mapcore-search-form">
+    <div class="mapcore-search-elements-container">
+      <div class="mapcore-search-field-container">
+        <input type="text" autocomplete="off" id="mapcore_search_input" placeholder="Search knowledgebase ..." class="el-input__inner">
+        <span id="mapcore_search_input_tooltip" class="mapcore-no-results-tooltip">No results found</span>
+      </div>
+      <div class="mapcore-search-button-container"><button data-v-4772168b="" type="submit" class="search-button el-button mapcore-search-button"><span>Search</span></button></div>
+    </div>
   </form>
 </div>

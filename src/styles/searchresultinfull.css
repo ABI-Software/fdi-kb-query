@@ -1,0 +1,21 @@
+.search-result-in-full {
+  position: relative;
+  background-color: white;
+  border: 1px solid;
+  border-radius: 7px;
+  margin: 2px 0;
+  margin-top: 1em;
+  padding: 3px;
+}
+
+.search-result-in-full img {
+    width: auto;
+    height: auto;
+}
+
+.search-result-in-full .description {
+  text-overflow: unset;
+  white-space: unset;
+  overflow: unset;
+}
+

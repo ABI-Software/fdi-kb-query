@@ -3,8 +3,12 @@
   visibility: visible;
 }
 
-.hide {
+.hidden {
   visibility: hidden;
+}
+
+.off {
+  display: none;
 }
 
 .float-left {
@@ -13,4 +17,8 @@
 
 .float-right {
   float: right;
+}
+
+.text-center {
+  align-text: center;
 }
