@@ -280,7 +280,7 @@ const renderDescription = (description, max_length) => {
     if (haveSimulation(data)) {
       let span_element = createIconSpan("mapcore_search_result_simulation_map")
       if (add_links) {
-        let supplementary_data = {'species': data["Simulation"]["species"], 'organ': data["Simulation"]["organ"], 'annotation': data["Simulation"]["annotation"]}
+        let supplementary_data = {'species': data["Simulation"]["species"], 'organ': data["Simulation"]["organ"], 'annotation': data["Simulation"]["annotation"], 'simulation_name': data['Simulation']['name']}
         addIconLinks(span_element, "simulation-show", data["Simulation"]["uri"], supplementary_data)
       }
       icons_element.firstElementChild.before(span_element)
@@ -523,7 +523,7 @@ const renderDescription = (description, max_length) => {
       }
       if (params.q.toUpperCase().includes("HEART") || params.q === "UBERON:0000948") {
         sorted_data.unshift({"Dataset Title": "Autonomic Nerve Stimulation Simulation", "Description": "This data links to a simulation experiment of the autonomic nerves innervating the heart.",
-         "Example Image": "", "Simulation": {"uri": "https://osparc.io/study/194bb264-a717-11e9-9dff-02420aff2767", 'species': 'Human', 'organ': 'heart', 'annotation': 'UBERON:0000948'}}
+         "Example Image": "", "Simulation": {"uri": "https://osparc.io/study/194bb264-a717-11e9-9dff-02420aff2767", 'species': 'Human', 'organ': 'heart', 'annotation': 'UBERON:0000948', 'name': 'Autonomic Nerve Stimulation'}}
         )
       }
       if (params.q.toUpperCase().includes("STELLATE") || params.q === "UBERON:0002440") {
