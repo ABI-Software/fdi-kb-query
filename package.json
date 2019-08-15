@@ -1,6 +1,6 @@
 {
   "name": "fdikbquery",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "FDI Knowledge base query tool.",
   "main": "build/fdikbquery.js",
   "files": [
