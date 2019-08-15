@@ -23,13 +23,18 @@
 .mapcore-search-header {
   margin: 0 5px;
   padding: 8px;
+  border: 1px solid;
+  border-bottom: none;
+  border-top-left-radius: 7px;
+  border-top-right-radius: 7px;
+  background: #f6faff;
 }
 
 .mapcore-search-footer {
   position: absolute;
   margin: 0 5px;
-  padding: 8px;
-  bottom: 0;
+  /* padding: 8px; */
+  bottom: 3px;
   right: 0;
   left: 0;
 }
@@ -58,6 +63,27 @@
 
 .mapcore-search-footer #mapcore_prev_page {
   margin-right: 2px;
+}
+
+.mapcore-search-footer-container {
+  position: relative;
+  background-color: #f6faff;
+  border: 1px solid;
+  border-bottom-left-radius: 7px;
+  border-bottom-right-radius: 7px;
+  border-top: none;
+  background: #f6faff;
+  margin: 2px 0;
+  padding: 3px;
+  float: left;
+  width: calc(100% - 8px);
+}
+
+.mapcore-vertical-center {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  -ms-transform: translateY(-50%);
 }
 
 .zero-width {

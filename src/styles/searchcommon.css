@@ -23,3 +23,6 @@
   align-text: center;
 }
 
+.transparent-border {
+  border-color: transparent;
+}

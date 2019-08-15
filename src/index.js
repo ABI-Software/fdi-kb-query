@@ -80,7 +80,7 @@ const renderDescription = (description, max_length) => {
     let paragraph = element.querySelector("#mapcore_search_result_paragraph")
     paragraph.innerHTML = renderDescription(data['Description'], 300)
     if (isCuratedData(data)) {
-      let curated_paragraph = element.querySelector("#mapcore_search_result_curated_data_paragraph")
+      let curated_paragraph = element.querySelector(".mapcore-search-result-curated-data-text")
       curated_paragraph.classList.add("hidden")
     }
     if (haveScaffold(data)) {
@@ -148,6 +148,23 @@ const renderDescription = (description, max_length) => {
     overlay_parent.appendChild(element)
   }
 
+  this.callOSPARC = () => {
+    console.log('execute simulation.')
+    let params  = {}
+    let osparc_endpoint = 'osparc/2/0.75'
+    axios.get(osparc_endpoint, {
+	   params: params,
+	 })
+	 .then(function (response) {
+	   console.log("someone responded to me.")
+    	 console.log(response)
+	  })
+	  .catch(function (error) {
+	    console.log("------- oSPARC REQUEST ERROR ---------")
+	    console.log(error);
+	  })
+  }
+
   const isCuratedData = (data) => {
     let curated = false;
     if ("Dataset Status" in data && data["Dataset Status"] == "released") {
@@ -208,11 +225,14 @@ const renderDescription = (description, max_length) => {
   }
 
   const createIconSpan = (span_id) => {
-    let span_element = document.createElement("span");
+    let container = document.createElement("div")
+    container.classList.add("mapcore-search-icon-container")
+    let span_element = document.createElement("span")
     span_element.setAttribute("id", span_id)
     span_element.classList.add("mapcore-search-icon")
     span_element.classList.add("mapcore-search-icon-small")
-    return span_element
+    container.appendChild(span_element)
+    return container
   }
 
   const addIconLinks = (target_element, action_type, resource, supplementary_data) => {
@@ -230,7 +250,7 @@ const renderDescription = (description, max_length) => {
     paragraph.innerHTML = renderDescription(data['Description'])
     let icons_element = element.querySelector("#mapcore_search_result_icons")
     if (isCuratedData(data)) {
-      let target_element = element.querySelector("#mapcore_search_result_curated_data_paragraph")
+      let target_element = element.querySelector(".mapcore-search-result-curated-data-text")
       target_element.classList.add("hidden")
     }
     if (haveScaffold(data)) {
@@ -260,34 +280,29 @@ const renderDescription = (description, max_length) => {
     if (haveSimulation(data)) {
       let span_element = createIconSpan("mapcore_search_result_simulation_map")
       if (add_links) {
-        let supplementary_data = {}
+        let supplementary_data = {'species': data["Simulation"]["species"], 'organ': data["Simulation"]["organ"], 'annotation': data["Simulation"]["annotation"]}
         addIconLinks(span_element, "simulation-show", data["Simulation"]["uri"], supplementary_data)
       }
       icons_element.firstElementChild.before(span_element)
     }
     if (haveImage(data)) {
-      let image_block = element.querySelector("#mapcore_search_result_image")
-      image_block.classList.add("float-left")
-      image_block.classList.remove('off')
       let img_id = getImageId(data["Example Image"])
-      let image = element.querySelector("#mapcore_search_result_thumbnail")
-      biolucida_client.get_thumbnail(image, img_id)
-      let span_element = createIconSpan("mapcore_search_result_image_map")
+      let div_element = createIconSpan("mapcore_search_result_image")
+      let img = document.createElement("img");
+      img.src = 'data:image/svg+xml;utf8,<svg id="Layer_2" data-name="Layer 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 309 309"><defs><style>.cls-1,.cls-2,.cls-3{fill:none;stroke-miterlimit:10;stroke-width:7px;}.cls-1{stroke:%2329abe2;}.cls-2{stroke:%23c1272d;}.cls-3{stroke:%23009245;}</style></defs><title>sparc-images-map</title><rect class="cls-1" x="3.5" y="3.5" width="302" height="302"/><line class="cls-2" x1="32" y1="77.5" x2="134" y2="77.5"/><line class="cls-2" x1="32" y1="252.5" x2="134" y2="252.5"/><line class="cls-2" x1="83.5" y1="78.5" x2="83.5" y2="252.5"/><line class="cls-3" x1="165.5" y1="252.5" x2="165.5" y2="165.5"/><line class="cls-3" x1="210.26" y1="213.76" x2="164.74" y2="168.24"/><line class="cls-3" x1="249.59" y1="169.41" x2="205.41" y2="213.59"/><line class="cls-3" x1="250.5" y1="252.5" x2="248.5" y2="165.5"/><line class="cls-3" x1="237" y1="252.5" x2="264" y2="252.5"/><line class="cls-3" x1="153" y1="252.5" x2="180" y2="252.5"/></svg>'
+      div_element.firstChild.appendChild(img)
+      biolucida_client.get_thumbnail(img, img_id)
       if (add_links) {
         let supplementary_data = {}
-        addIconLinks(span_element, "image-show", data["Example Image"], supplementary_data)
-        addIconLinks(image, "image-show", data["Example Image"], supplementary_data)
+        addIconLinks(div_element, "image-show", data["Example Image"], supplementary_data)
       }
-      icons_element.firstElementChild.before(span_element)
+      icons_element.firstElementChild.before(div_element)
     }
   }
 
   const renderFullResult = (parent, data) => {
     let element = this.htmlToElement(require("./snippets/searchresultinfull.html"))
     renderResult(element, data, true)
-    let image_block = element.querySelector("#mapcore_search_result_image")
-    image_block.classList.remove("float-left")
-    image_block.classList.add("text-center")
     let icon_elements = element.querySelectorAll(".mapcore-search-icon")
     icon_elements.forEach(function(element) {
       element.classList.remove("mapcore-search-icon-small")
@@ -374,25 +389,17 @@ const renderDescription = (description, max_length) => {
   }
 
   const renderSearchResults = (data, page_number) => {
-    setSearchResultsActive()
-    storePageNumber(page_number, "search")
+    let active_search_results = areSearchResultsActive()
+    storePageNumber(page_number, active_search_results ? "search" : "starting")
     paged_data = paginator(data, page_number, per_page)
-    prepareHeader(true)
-    renderResults(paged_data, page_number)
-    prepareFooter(paged_data)
-  }
-
-  const renderStartingResults = (data, page_number) => {
-    storePageNumber(page_number, "starting")
-    paged_data = paginator(data, page_number, per_page)
-    prepareHeader(false)
+    prepareHeader(active_search_results ? true : false)
     renderResults(paged_data, page_number)
     prepareFooter(paged_data)
   }
 
   const storePageNumber = (page_number, variant) => {
     let search_container_element = parent.querySelector('#mapcore_search_results_container')
-    search_container_element.setAttribute("page_number" + "_" + variant, page_number.toString())
+    search_container_element.setAttribute("page_number_" + variant, page_number.toString())
   }
 
   const retrievePageNumber = (variant) => {
@@ -410,7 +417,7 @@ const renderDescription = (description, max_length) => {
     search_container_element.removeAttribute("search_results")
   }
 
-  const getSearchResultsActive = () => {
+  const areSearchResultsActive = () => {
     let search_container_element = parent.querySelector('#mapcore_search_results_container')
     return search_container_element.getAttribute("search_results") === "active"
   }
@@ -463,19 +470,15 @@ const renderDescription = (description, max_length) => {
   }
 
   this.clearFullSearchResult = () => {
-    let active_search_results = getSearchResultsActive()
-    if (active_search_results) {
-      renderSearchResults(current_results, retrievePageNumber("search"))
-    } else {
-      renderStartingResults(current_results, retrievePageNumber("starting"))
-    }
+    let active_search_results = areSearchResultsActive()
+    renderSearchResults(current_results, active_search_results ? retrievePageNumber("search") : retrievePageNumber("starting"))
   }
 
   this.clearSearchResults = () => {
     setSearchResultsInActive()
     let page_number = retrievePageNumber("starting")
     current_results = pre_packaged_results.get_results()
-    renderStartingResults(current_results, page_number)
+    renderSearchResults(current_results, page_number)
   }
 
   this.clearResults = () => {
@@ -644,8 +647,8 @@ const renderDescription = (description, max_length) => {
               tooltip_element.classList.add("show")
               setTimeout(function(){ tooltip_element.classList.remove("show"); }, 3000);
             } else {
-            console.log(data)
               current_results = augmentResults(data, query_params)
+              setSearchResultsActive()
               renderSearchResults(current_results, 1);
             }
 	      }
@@ -704,7 +707,7 @@ const renderDescription = (description, max_length) => {
     let mapcore_content_panel_element = parent.querySelector("#mapcore_content_panel")
     setupSearchResults(mapcore_content_panel_element);
     current_results = pre_packaged_results.get_results()
-    renderStartingResults(current_results, 1)
+    renderSearchResults(current_results, 1)
   }
 
   initialise();
