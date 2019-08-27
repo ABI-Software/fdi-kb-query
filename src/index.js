@@ -529,7 +529,7 @@ const renderDescription = (description, max_length) => {
       if (params.q.toUpperCase().includes("STELLATE") || params.q === "UBERON:0002440") {
         sorted_data.unshift({"Dataset Title": "Mouse Stellate Ganglion", "Description": "Data from the Shivkumar/Tompkins group displayed in a 3D stellate scaffold.",
           "Example Image": "", "Scaffold": {"uri": "https://mapcore-bucket1.s3-us-west-2.amazonaws.com/ISAN/scaffold/stellate/stellate_metadata.json", 'species': 'Mouse', 'organ': 'nerve', 'annotation': 'UBERON:0002440'},
-          "DataViewer": {"uri": "https://mapcore-bucket1.s3-us-west-2.amazonaws.com/ISAN/csv-data/use-case-2/Sample_1_18907001_channel_1.csv", 'species': 'Mouse', 'organ': 'nerve', 'annotation': 'UBERON:0002440'}}
+          "DataViewer": {"uri": "https://mapcore-bucket1.s3-us-west-2.amazonaws.com/ISAN/csv-data/stellate/directory-meta.json", 'species': 'Mouse', 'organ': 'nerve', 'annotation': 'UBERON:0002440'}}
         )
       }
       if (params.q.toUpperCase().includes("LUNG") || params.q === "UBERON:0002048") {
