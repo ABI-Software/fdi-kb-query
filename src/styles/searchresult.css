@@ -13,12 +13,12 @@
 }
 
 .search-result:hover {
-  cursor: pointer;
-  box-shadow: 0 3px 10px 0px rgb(177, 0, 121);
-  -moz-box-shadow: 0 3px 10px 0px rgb(177, 0, 121);
-  -webkit-box-shadow: 0 3px 10px 0px rgb(177, 0, 121);
-  -o-box-shadow: 0 3px 10px 0px rgb(177, 0, 121);
-  -ms-box-shadow: 0 3px 10px 0px rgb(177, 0, 121);
+
+  box-shadow: 0 3px 10px 0px rgb(101, 22, 76);
+  -moz-box-shadow: 0 3px 10px 0px rgb(101, 22, 76);
+  -webkit-box-shadow: 0 3px 10px 0px rgb(101, 22, 76);
+  -o-box-shadow: 0 3px 10px 0px rgb(101, 22, 76);
+  -ms-box-shadow: 0 3px 10px 0px rgb(101, 22, 76);
 }
 
 #mapcore_search_result_heading {
