@@ -1,151 +1,59 @@
 
-.margin-right-8 {
-    margin-right: 8%;
-}
 
-#mapcore_search_widget {
-/*
-  display: flex;
-  float: left;
-  margin-right: 3px;
-  margin-left: 2px;
-*/
-}
-
-#mapcore_search_form {
-  display: inline-flex;
-  margin: 1px 1px 1px 1px;
-}
-
-#mapcore_search_widget input[type=text] {
-  -webkit-transition: all 0.30s ease-in-out;
-  -moz-transition: all 0.30s ease-in-out;
-  -ms-transition: all 0.30s ease-in-out;
-  -o-transition: all 0.30s ease-in-out;
-  padding: 6px;
-  border: 1px;
-  border-right-style:hidden;
-  margin-top: 8px;
-  margin-bottom: 8px;
-  margin-left: 8px;
-  font-size: 17px;
-}
-
-#mapcore_search_results_container {
-    float: left;
-    width: 25%;
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    overflow-y: auto;
-    margin: 0 0.5%;
-}
-
-.hidden {
-  display: none;
-}
-
-.margin-left-26 {
-    margin-left: 26%;
-}
-
-/*
-#mapcore_search_widget input:-webkit-autofill,
-#mapcore_search_widget input:-webkit-autofill:hover,
-#mapcore_search_widget input:-webkit-autofill:focus,
-#mapcore_search_widget textarea:-webkit-autofill,
-#mapcore_search_widget textarea:-webkit-autofill:hover,
-#mapcore_search_widget textarea:-webkit-autofill:focus,
-#mapcore_search_widget select:-webkit-autofill,
-#mapcore_search_widget select:-webkit-autofill:hover,
-#mapcore_search_widget select:-webkit-autofill:focus {
-  border-right-style:hidden;
-  -webkit-text-fill-color: green;
-  border-width: 2px;
-}
-*/
-
-#search_form_clear {
-  border: none;
-}
-
-#mapcore_search_widget .search-form input[type=search] {
-  background: white;
-  border-color: #95939c;
-  border-style: solid;
-  border-right-style:hidden;
-  min-width: 0;
-  -webkit-box-flex: 1;
-  -ms-flex: 1;
-  flex: 1;
-  padding: .75rem 1.5rem .75rem 1.5rem;
-  border-top-left-radius: 27px;
-  border-bottom-left-radius: 27px;
-  border-top-right-radius: 0;
-  border-bottom-right-radius: 0;
-  -webkit-appearance: unset;
-  outline: none;
-  border-width: 2px;
-}
-
-#mapcore_search_widget .search-form svg {
-  width: 22px;
-  height: 22px;
-}
-
-#mapcore_search_widget .button-search {
-  border-color: #95939c;
-  border-left-style:hidden;
-  border-top-right-radius: 27px;
-  border-bottom-right-radius: 27px;
-  /*
-  background-image: -webkit-gradient(linear,left top,right top,from(#140fff),to(#ff0042));
-  background-image: linear-gradient(to right,#140fff,#ff0042);
-  */
-  padding: 8px 18px 8px 14px;
-  cursor: pointer;
-  outline: none;
-  color: #96959b;
-  border-width: 2px;
-}
-
-.close-icon {
-  position: relative;
-  border:1px solid transparent;
-  background-color: transparent;
+.mapcore-search-field-container {
   display: inline-block;
-  vertical-align: middle;
-  padding: 0 !important;
-  margin: 0 !important;
-  border: 0;
-  outline: 0;
-  cursor: pointer;
+  position: relative;
 }
 
-.close-icon:after {
-	content: "X";
-	display: block;
-	width: 15px;
-	height: 15px;
-	position: absolute;
-	background-color: #FA9595;
-/*	z-index:1; */
-	right: 5px;
-	top: -6px;
-	bottom: 0;
-	margin: auto;
-	padding: 0px;
-	border-radius: 50%;
-	text-align: center;
-	color: white;
-	font-weight: normal;
-	font-size: 12px;
-	box-shadow: 0 0 2px #E50F0F;
-	cursor: pointer;
+.mapcore-search-button-container {
+  display: inline-block;
 }
 
-#mapcore_search_input:not(:valid) ~ .close-icon {
-	display: none;
+.mapcore-search-button:hover {
+  background-color: #cc068d;
+  border-color: #cc068d;
+  color: white;
 }
+
+.mapcore-search-button, .mapcore-search-button:focus {
+  /* background-image: linear-gradient(to right, rgba(25,6,204), rgba(255,0,61)); */
+  background-color: #b10079;
+  border-color: #b10079;
+  color: white;
+}
+
+.mapcore-search-elements-container {
+    text-align: center;
+}
+
+.mapcore-search-form {
+  margin: 2em 0;
+}
+
+/* Tooltip text */
+.mapcore-no-results-tooltip {
+  visibility: hidden;
+  background-color: #63666a;
+  color: #fff;
+  text-align: center;
+  padding: 5px 8px;
+  border-radius: 6px;
+
+  position: absolute;
+  z-index: 1;
+
+  top: 110%;
+  left: 0%;
+}
+
+.mapcore-no-results-tooltip::after {
+  content: "";
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: transparent transparent #63666a transparent;
+}
+

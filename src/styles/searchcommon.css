@@ -1,0 +1,28 @@
+
+.show {
+  visibility: visible;
+}
+
+.hidden {
+  visibility: hidden;
+}
+
+.off {
+  display: none;
+}
+
+.float-left {
+  float: left;
+}
+
+.float-right {
+  float: right;
+}
+
+.text-center {
+  align-text: center;
+}
+
+.transparent-border {
+  border-color: transparent;
+}

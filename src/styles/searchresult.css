@@ -1,13 +1,21 @@
 .search-result {
   position: relative;
-    background-color: white;
-    border: 1px solid;
-    border-radius: 7px;
-    margin: 2px 0;
+  background-color: white;
+  border: 1px solid;
+  border-radius: 7px;
+  margin: 2px 0;
+  padding: 3px;
 }
 
-.float-left {
-  float: left;
+.search-result:hover {
+  background-color: #aaa;
+  cursor: pointer;
+}
+
+#mapcore_search_result_heading {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
 }
 
 .search-result .description {
@@ -28,7 +36,7 @@
   overflow:unset;
 }
 
-#mapcore_search_result_curated_data_paragraph.hidden {
+.mapcore-search-result-curated-data-text .hidden {
   display: none;
 }
 
@@ -42,7 +50,10 @@
   border: none;
 }
 
-#mapcore_search_result_curated_data_paragraph {
+.mapcore-search-result-curated-data-text {
+  position: absolute;
+  right: 3px;
+  bottom: 3px;
   border: none;
   height: 1em;
   width: auto;
@@ -54,15 +65,21 @@
     margin-bottom: 0;
 }
 
-.search-result span {
+.search-result #mapcore_image_control_span {
     display: inline-block;
     width: 96px;
     height: 96px;
     border: 1px solid #888;
     position: relative;
-    margin-right: 5px;
 }
 
+.search-result img {
+  max-width: 100%;
+  max-height: 100%;
+  margin-bottom: unset;
+}
+
+/*
 .search-result img {
     max-width: 96px;
     max-height: 96px;
@@ -78,50 +95,57 @@
 
     margin: auto;
 }
+*/
 
-#mapcore_search_result_scaffold_map.disabled-map, #mapcore_search_result_flatmap_map.disabled-map, #mapcore_search_result_data_viewer_map.disabled-map, #mapcore_search_result_simulation_map.disabled-map {
-  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 116 116'><title>sparc-data-map</title><circle cx='58' cy='58' r='57.5' style='fill:%23999'/><path d='M320,183a57,57,0,1,1-57,57,57.06,57.06,0,0,1,57-57m0-1a58,58,0,1,0,58,58,58,58,0,0,0-58-58Z' transform='translate(-262 -182)'/></svg>");
+
+.mapcore-search-icon-container {
+  border: transparent 1px solid;
+  border-radius: 3px;
+  padding: 1px;
+  display: inline-block;
+  margin-right: 8px;
+}
+
+.mapcore-search-icon-container:hover {
+  border: gray 1px solid;
+}
+
+.mapcore-search-icon-small {
+  width: 3em;
+  height: 3em;
+}
+
+.mapcore-search-icon-medium {
+  width: 5em;
+  height: 5em;
+}
+
+.mapcore-search-icon {
+  background-repeat: no-repeat;
+  background-size: contain;
+  display: block;
+}
+
+#mapcore_search_result_image_map {
+  background-image: url('data:image/svg+xml;utf8,<svg id="Layer_2" data-name="Layer 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 309 309"><defs><style>.cls-1,.cls-2,.cls-3{fill:none;stroke-miterlimit:10;stroke-width:7px;}.cls-1{stroke:%2329abe2;}.cls-2{stroke:%23c1272d;}.cls-3{stroke:%23009245;}</style></defs><title>sparc-images-map</title><rect class="cls-1" x="3.5" y="3.5" width="302" height="302"/><line class="cls-2" x1="32" y1="77.5" x2="134" y2="77.5"/><line class="cls-2" x1="32" y1="252.5" x2="134" y2="252.5"/><line class="cls-2" x1="83.5" y1="78.5" x2="83.5" y2="252.5"/><line class="cls-3" x1="165.5" y1="252.5" x2="165.5" y2="165.5"/><line class="cls-3" x1="210.26" y1="213.76" x2="164.74" y2="168.24"/><line class="cls-3" x1="249.59" y1="169.41" x2="205.41" y2="213.59"/><line class="cls-3" x1="250.5" y1="252.5" x2="248.5" y2="165.5"/><line class="cls-3" x1="237" y1="252.5" x2="264" y2="252.5"/><line class="cls-3" x1="153" y1="252.5" x2="180" y2="252.5"/></svg>');
 }
 
 #mapcore_search_result_scaffold_map {
-  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 116 116'><title>sparc-data-map</title><circle cx='58' cy='58' r='57.5' style='fill:%230071bc'/><path d='M320,183a57,57,0,1,1-57,57,57.06,57.06,0,0,1,57-57m0-1a58,58,0,1,0,58,58,58,58,0,0,0-58-58Z' transform='translate(-262 -182)'/></svg>");
+  background-image: url('data:image/svg+xml;utf8,<svg id="Layer_2" data-name="Layer 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 369.5 341"><defs><style>.cls-1,.cls-2,.cls-3,.cls-4,.cls-5,.cls-6,.cls-7{fill:none;stroke-linecap:round;stroke-miterlimit:10;stroke-width:7px;}.cls-1{stroke:%23c1272d;}.cls-2,.cls-3,.cls-5,.cls-6{stroke:%23fbb03b;}.cls-3{stroke-dasharray:11.9 11.9;}.cls-4{stroke:%230071bc;}.cls-5{stroke-dasharray:13.79 13.79;}.cls-6{stroke-dasharray:13.8 13.8;}.cls-7{stroke:%23009245;}</style></defs><title>sparc-scaffold-map</title><line class="cls-1" x1="227.5" y1="20.55" x2="26.85" y2="3.5"/><line class="cls-2" x1="195.5" y1="182.55" x2="200.42" y2="186.8"/><line class="cls-3" x1="209.44" y1="194.57" x2="295.07" y2="268.42"/><line class="cls-2" x1="299.58" y1="272.31" x2="304.5" y2="276.55"/><line class="cls-4" x1="366" y1="82.05" x2="304.5" y2="276.55"/><line class="cls-2" x1="228" y1="21.05" x2="226.72" y2="27.42"/><line class="cls-5" x1="224" y1="40.95" x2="198.14" y2="169.42"/><line class="cls-2" x1="196.78" y1="176.18" x2="195.5" y2="182.55"/><line class="cls-1" x1="227.5" y1="20.55" x2="365.5" y2="81.55"/><line class="cls-4" x1="365.5" y1="81.55" x2="178.5" y2="105.55"/><line class="cls-4" x1="304.5" y1="276.55" x2="133.85" y2="337.5"/><line class="cls-2" x1="195.5" y1="182.55" x2="189.03" y2="183.12"/><line class="cls-6" x1="175.28" y1="184.34" x2="17.19" y2="198.32"/><line class="cls-2" x1="10.32" y1="198.93" x2="3.85" y2="199.5"/><line class="cls-7" x1="28.56" y1="4.06" x2="178.5" y2="105.55"/><line class="cls-7" x1="25" y1="5.05" x2="3.5" y2="199.55"/><line class="cls-7" x1="3.5" y1="199.55" x2="131.5" y2="336.55"/><line class="cls-4" x1="179" y1="106.05" x2="132" y2="337.05"/></svg>');
 }
 
 #mapcore_search_result_data_viewer_map {
-  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 116 116'><title>sparc-data-map</title><circle cx='58' cy='58' r='57.5' style='fill:%2339b54a'/><path d='M320,183a57,57,0,1,1-57,57,57.06,57.06,0,0,1,57-57m0-1a58,58,0,1,0,58,58,58,58,0,0,0-58-58Z' transform='translate(-262 -182)'/></svg>");
+  background-image: url('data:image/svg+xml;utf8,<svg id="Layer_2" data-name="Layer 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 328.02 270.48"><defs><style>.cls-1,.cls-2,.cls-3,.cls-4,.cls-5{fill:none;stroke-miterlimit:10;stroke-width:12px;}.cls-1{stroke:%23000;}.cls-2{stroke:%23006837;}.cls-3{stroke:%23fbb03b;}.cls-4{stroke:%230071bc;}.cls-5{stroke:%23c1272d;}</style></defs><title>sparc-data-map</title><line class="cls-1" x1="328.01" y1="263.98" x2="0.01" y2="264.48"/><line class="cls-2" x1="81.01" y1="219.98" x2="24.01" y2="220.48"/><path class="cls-1" d="M367.31,91.82c-22,3.42-70.07,19-141.31,86.18-44.76,42.21-112,87-141,87" transform="translate(-84.99 -72.02)"/><polygon points="257.15 1.12 278.78 20.1 259.79 41.72 277.03 40.6 296.01 18.98 274.39 0 257.15 1.12"/><line class="cls-2" x1="30.01" y1="241.98" x2="30.01" y2="214.98"/><line class="cls-2" x1="75.01" y1="241.98" x2="75.01" y2="214.98"/><line class="cls-3" x1="156.01" y1="172.98" x2="99.01" y2="173.48"/><line class="cls-3" x1="105.01" y1="241.98" x2="105.01" y2="167.98"/><line class="cls-3" x1="150.01" y1="241.98" x2="150.01" y2="167.98"/><line class="cls-4" x1="229.01" y1="118.98" x2="172.01" y2="119.48"/><line class="cls-4" x1="178.01" y1="241.98" x2="178.01" y2="113.98"/><line class="cls-4" x1="223.01" y1="241.98" x2="223.01" y2="113.98"/><line class="cls-5" x1="306.01" y1="78.98" x2="249.01" y2="79.48"/><line class="cls-5" x1="255.01" y1="241.98" x2="255.01" y2="73.98"/><line class="cls-5" x1="300.01" y1="241.98" x2="300.01" y2="73.98"/></svg>');
 }
 
 #mapcore_search_result_simulation_map {
-  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 116 116'><title>sparc-data-map</title><circle cx='58' cy='58' r='57.5' style='fill:%2393278f'/><path d='M320,183a57,57,0,1,1-57,57,57.06,57.06,0,0,1,57-57m0-1a58,58,0,1,0,58,58,58,58,0,0,0-58-58Z' transform='translate(-262 -182)'/></svg>");
+  background-image: url('data:image/svg+xml;utf8,<svg id="Layer_2" data-name="Layer 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 277.12 148.73"><defs><style>.cls-1,.cls-2,.cls-3,.cls-4,.cls-5,.cls-6,.cls-7,.cls-8,.cls-9{fill:none;stroke:%23000;}.cls-1,.cls-2,.cls-3,.cls-4,.cls-5,.cls-6,.cls-7,.cls-8{stroke-miterlimit:10;}.cls-1,.cls-7{stroke-width:4px;}.cls-2{stroke-width:12px;}.cls-3{stroke-width:6px;}.cls-4{stroke-width:13px;}.cls-5{stroke-width:5px;}.cls-6{stroke-width:10px;}.cls-7{stroke-linecap:round;}.cls-8,.cls-9{stroke-width:3px;}.cls-9{stroke-linecap:square;stroke-linejoin:bevel;}</style></defs><title>sparc-simulation-map</title><path d="M424.8,135.7a4.7,4.7,0,0,1,1,1.5c1.14,2.63,0,6.07-2.09,8-2.43,2.31-7.1,3.51-9.54,1.06s-1.87-6.61,1.06-9.54S422.46,133.35,424.8,135.7Z" transform="translate(-149.16 -127.95)"/><ellipse cx="351.5" cy="264" rx="7.5" ry="6" transform="translate(-232.89 197.92) rotate(-45)"/><path d="M424,136c.69-1.62-4.69-7.4-11-8-9.78-.93-17.92,11-20,14-7.76,11.34-5.74,19.71-10,46-6,37-5,29-9,50h0s-3,25-10,33c-1.32,1.51-7.13,2.45-9,2-1.24-.29-2.28-.84-5-3-3.7-2.94-4.67-4.22-5-4-.59.39.47,5.75,4,8,11,7,19.59-.91,26-10,1-1.45,3.23-3.51,6-16,3-13.55,3.67-15.95,6-27,3.3-15.6,8-49,10-58,1-4.35,2-8,4-16,1-3.95,2.16-5.4,4-7,2.24-1.94,4.75-2.42,8-3C420,135.75,423.5,137.17,424,136Z" transform="translate(-149.16 -127.95)"/><line class="cls-1" x1="114.84" y1="97.05" x2="137.84" y2="97.05"/><line class="cls-1" x1="158.84" y1="97.05" x2="175.84" y2="97.05"/><line class="cls-2" x1="125.84" y1="98.05" x2="144.84" y2="136.05"/><line class="cls-3" x1="167.84" y1="97.05" x2="144.84" y2="143.05"/><line class="cls-4" x1="5.84" y1="22.05" x2="57.84" y2="128.05"/><line class="cls-5" x1="111.84" y1="22.05" x2="57.84" y2="128.05"/><line class="cls-6" x1="5.84" y1="22.05" x2="111.84" y2="22.05"/><line class="cls-7" x1="129.34" y1="75.55" x2="175.34" y2="75.55"/><line class="cls-7" x1="169.84" y1="65.05" x2="175.84" y2="75.05"/><line class="cls-7" x1="165.84" y1="83.05" x2="175.84" y2="75.05"/><line class="cls-7" x1="213.84" y1="67.05" x2="258.84" y2="67.05"/><line class="cls-3" x1="121.84" y1="97.05" x2="144.84" y2="143.05"/><path class="cls-8" d="M290.5,267.5" transform="translate(-149.16 -127.95)"/><path class="cls-8" d="M294.5,274.5" transform="translate(-149.16 -127.95)"/><path class="cls-9" d="M293.5,272.5" transform="translate(-149.16 -127.95)"/><path class="cls-9" d="M286.5,259.5" transform="translate(-149.16 -127.95)"/><line class="cls-5" x1="145.34" y1="130.05" x2="145.34" y2="144.05"/></svg>');
 }
 
 #mapcore_search_result_flatmap_map {
-  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 116 116'><title>sparc-data-map</title><circle cx='58' cy='58' r='57.5' style='fill:%23f7931e'/><path d='M320,183a57,57,0,1,1-57,57,57.06,57.06,0,0,1,57-57m0-1a58,58,0,1,0,58,58,58,58,0,0,0-58-58Z' transform='translate(-262 -182)'/></svg>");
+  background-image: url('data:image/svg+xml;utf8,<svg id="Layer_2" data-name="Layer 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 352.53 366.26"><defs><style>.cls-1,.cls-2,.cls-3,.cls-4,.cls-5{fill:none;stroke-miterlimit:10;stroke-width:7px;}.cls-1{stroke:%23c1272d;}.cls-2{stroke:%23009245;}.cls-3{stroke:%23fbb03b;}.cls-4{stroke:%2329abe2;}.cls-5{stroke:%2339b54a;}</style></defs><title>sparc-flat-map</title><path class="cls-1" d="M266,340c8.27,5.38,15.16,6.76,20,7,6.11.3,8.35-1.24,18-1,7.92.2,8.9,1.3,14,1,4.28-.25,10.51-1.45,18-6" transform="translate(-129.51 -78.37)"/><path class="cls-1" d="M253,331a69.81,69.81,0,0,0,20-10c9.28-6.74,12.36-12.65,18-12,6.46.74,7.85,9.11,14,9,5.2-.09,5.73-6.1,11-7,9.88-1.69,18.85,17.56,25,15,2.23-.93,2.85-4.21,3-5,1.14-6-5.4-9.29-5-16,0-.63.33-4.53,3-7,5.47-5.06,14.17,2.12,27,0,1.31-.22,12.64-2.23,18-10,6.23-9,1.28-21.35-2-33-1.2-4.25-17.5-35.5-33.5-72.5s-42-71.44-39-72" transform="translate(-129.51 -78.37)"/><path class="cls-2" d="M253,333c17.56-6.82,28.3-5.63,35-3,2.91,1.14,8.61,3.95,16,3,4.94-.64,7.49-2.54,11-4,5.27-2.19,13.47-3.67,26,0" transform="translate(-129.51 -78.37)"/><path class="cls-3" d="M296,279a19.81,19.81,0,0,1,24,2" transform="translate(-129.51 -78.37)"/><path class="cls-3" d="M344,279a17.8,17.8,0,0,1,13-5,17.23,17.23,0,0,1,10,4" transform="translate(-129.51 -78.37)"/><path class="cls-1" d="M259,202c-3.15,3.94-23.86,29-60,31-36.9,2.07-60.57-21.47-64-25" transform="translate(-129.51 -78.37)"/><path class="cls-4" d="M261,190c-5.46-4.89-27.9-23.85-62-24-38.28-.16-62.57,23.52-67,28" transform="translate(-129.51 -78.37)"/><path class="cls-1" d="M245,152a104.12,104.12,0,0,0-109,5" transform="translate(-129.51 -78.37)"/><ellipse cx="187.95" cy="198.63" rx="11.53" ry="3.06" transform="translate(-172.25 267.11) rotate(-79.06)"/><path class="cls-3" d="M364,94a104.13,104.13,0,0,1,106,5" transform="translate(-129.51 -78.37)"/><ellipse cx="281.99" cy="46.63" rx="2.5" ry="11"/><path class="cls-3" d="M396,106c5.65-4.17,18.43-12.36,36-13,16.62-.61,42,5.38,46,20,5.16,19-28.13,45-47,44a54.28,54.28,0,0,1-23.68-7.42c-1-.63-1.78-1.19-2.32-1.58" transform="translate(-129.51 -78.37)"/><path class="cls-2" d="M411,146a144.9,144.9,0,0,0,34-12c5-2.5,24.42-12.23,23-17-1-3.27-10.81-.91-40-3a249.47,249.47,0,0,1-26.59-3.21c-5.59-1-10.2-2-13.41-2.79" transform="translate(-129.51 -78.37)"/><path class="cls-1" d="M400,115c-.24.39-5.76,9.69-1,18a14.43,14.43,0,0,0,9,7c7.46,1.68,13.23-4.19,14-5,6.45-6.78,4.18-16.3,4-17" transform="translate(-129.51 -78.37)"/><path class="cls-4" d="M247,199a141.92,141.92,0,0,0-112-3" transform="translate(-129.51 -78.37)"/><path class="cls-5" d="M133,201q8.73,3.06,18,6,10.22,3.24,20,6" transform="translate(-129.51 -78.37)"/><path class="cls-4" d="M202,214a151.32,151.32,0,0,0,24-5,152.6,152.6,0,0,0,19-7" transform="translate(-129.51 -78.37)"/><path class="cls-3" d="M176,191a23.93,23.93,0,0,0-3,13c.07,1.07,1.07,13.55,9,16,5.44,1.68,10.84-2.38,13-4a23.08,23.08,0,0,0,8-12,26.54,26.54,0,0,0,1-11" transform="translate(-129.51 -78.37)"/><path class="cls-4" d="M196,415a273.51,273.51,0,0,0,42,17c23.52,7.33,36.46,11.19,53,8,5.93-1.14,28.87-5.57,39-24,6.32-11.5,6.07-25.58,6-28-.33-11.35-3.79-13.07-2-21,2.43-10.79,10.08-13.18,11-23,.57-6.13-1.82-11.42-4-15" transform="translate(-129.51 -78.37)"/></svg>');
 }
 
  .cursor-pointer {
   cursor: pointer;
 }
-
-.overlay {
-    top: 20%;
-    left: 24%;
-    width: 30%;
-    height: 60%;
-    display: none;
-    position: fixed;
-    z-index: 1000000;
-}
-
-.search-result:hover .overlay {
-  display: block;
-  background-color: #e6f0ff;
-  padding: 4px;
-  border: 2px solid;
-}
-
-/*
-#search_result_overlay:focus {
-  display: none;
-}
-*/
