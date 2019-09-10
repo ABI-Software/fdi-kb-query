@@ -3,6 +3,7 @@ const biolucidaclient_module = require('@abi-software/biolucidaclient').biolucid
 const prepackagedresults_module = require('@abi-software/mapcore-pre-packaged-results').mapcore_pre_packaged_results_module
 const augmentedresults_module = require('@abi-software/mapcore-augmented-results').mapcore_augmented_results_module
 const parseString = require('xml2js').parseString;
+const tippy = require('tippy.js/umd/index.all.js')
 require("./styles/searchwidget.css");
 require("./styles/searchresultslist.css");
 require("./styles/searchresult.css");
@@ -319,6 +320,7 @@ const renderDescription = (description, max_length) => {
     element.addEventListener("click", this.resultClicked)
 
     result_parent.appendChild(element)
+
   }
 
   const setupButton = (element, page_number) => {
@@ -395,6 +397,7 @@ const renderDescription = (description, max_length) => {
     prepareHeader(active_search_results ? true : false)
     renderResults(paged_data, page_number)
     prepareFooter(paged_data)
+    setupIconTooltips()
   }
 
   const storePageNumber = (page_number, variant) => {
@@ -677,6 +680,24 @@ const renderDescription = (description, max_length) => {
       search_input.value = message.resource
       doQuery()
     }
+  }
+
+  const setupIconTooltips = _ => {
+    tooltip('#mapcore_search_result_flatmap_map', 'View map of organs')
+    tooltip('#mapcore_search_result_data_viewer_map', 'View plot of data')
+    tooltip('#mapcore_search_result_simulation_map', 'Run simulation on data')
+    tooltip('#mapcore_search_result_scaffold_map', 'View data on a 3d scaffold')
+  }
+
+  const tooltip = (id, message) => {
+    tippy(id,{
+      content: message,
+      placement: 'bottom',
+      animateFill: false,
+      animation: 'shift-away',
+      arrow: true,
+      delay: [500,0],
+    })
   }
 
   const setupSearchWidget = (container) => {
