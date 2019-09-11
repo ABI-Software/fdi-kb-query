@@ -311,6 +311,7 @@ const renderDescription = (description, max_length) => {
     });
 
     parent.appendChild(element)
+    setupIconTooltips()
   }
 
   const renderShortResult = (result_parent, entry_index, data) => {
