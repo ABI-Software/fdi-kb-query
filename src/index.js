@@ -398,6 +398,7 @@ const renderDescription = (description, max_length) => {
     renderResults(paged_data, page_number)
     prepareFooter(paged_data)
     setupIconTooltips()
+    setupResultTooltips()
   }
 
   const storePageNumber = (page_number, variant) => {
@@ -682,11 +683,23 @@ const renderDescription = (description, max_length) => {
     }
   }
 
+  const setupResultTooltips = _ => {
+    tippy('#mapcore_search_result_text_content',{
+      content: 'View expanded description',
+      placement: 'right',
+      animateFill: false,
+      animation: 'shift-away',
+      followCursor: 'initial',
+      delay: [700,0],
+    })
+  }
+
   const setupIconTooltips = _ => {
     tooltip('#mapcore_search_result_flatmap_map', 'View map of organs')
     tooltip('#mapcore_search_result_data_viewer_map', 'View plot of data')
     tooltip('#mapcore_search_result_simulation_map', 'Run simulation on data')
     tooltip('#mapcore_search_result_scaffold_map', 'View data on a 3d scaffold')
+    tooltip('#mapcore_search_result_image', 'View full resolution image')
   }
 
   const tooltip = (id, message) => {
