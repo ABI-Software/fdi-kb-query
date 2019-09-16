@@ -23,11 +23,12 @@
 .mapcore-search-header {
   margin: 0 5px;
   padding: 8px;
-  border: 1px solid;
   border-bottom: none;
   border-top-left-radius: 7px;
   border-top-right-radius: 7px;
   background: #f6faff;
+  font-size: 1.3em;
+  color: rgb(177, 0, 121);
 }
 
 .mapcore-search-footer {
@@ -68,7 +69,6 @@
 .mapcore-search-footer-container {
   position: relative;
   background-color: #f6faff;
-  border: 1px solid;
   border-bottom-left-radius: 7px;
   border-bottom-right-radius: 7px;
   border-top: none;
@@ -106,10 +106,14 @@
 .mapcore-footer-icon {
   display: inline-block;
   margin-top: 6px;
-  height: 1em;
-  width: 1em;
+  height: 1.5em;
+  width: 1.5em;
   background-position: center;
   background-repeat: no-repeat;
+}
+
+.mapcore-footer-icon:hover {
+  cursor: pointer;
 }
 
 .mapcore-search-footer button:disabled {

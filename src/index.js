@@ -3,6 +3,7 @@ const biolucidaclient_module = require('@abi-software/biolucidaclient').biolucid
 const prepackagedresults_module = require('@abi-software/mapcore-pre-packaged-results').mapcore_pre_packaged_results_module
 const augmentedresults_module = require('@abi-software/mapcore-augmented-results').mapcore_augmented_results_module
 const parseString = require('xml2js').parseString;
+const tippy = require('tippy.js/umd/index.all.js')
 require("./styles/searchwidget.css");
 require("./styles/searchresultslist.css");
 require("./styles/searchresult.css");
@@ -310,6 +311,7 @@ const renderDescription = (description, max_length) => {
     });
 
     parent.appendChild(element)
+    setupIconTooltips()
   }
 
   const renderShortResult = (result_parent, entry_index, data) => {
@@ -319,6 +321,7 @@ const renderDescription = (description, max_length) => {
     element.addEventListener("click", this.resultClicked)
 
     result_parent.appendChild(element)
+
   }
 
   const setupButton = (element, page_number) => {
@@ -395,6 +398,8 @@ const renderDescription = (description, max_length) => {
     prepareHeader(active_search_results ? true : false)
     renderResults(paged_data, page_number)
     prepareFooter(paged_data)
+    setupIconTooltips()
+    setupResultTooltips()
   }
 
   const storePageNumber = (page_number, variant) => {
@@ -529,7 +534,7 @@ const renderDescription = (description, max_length) => {
       if (params.q.toUpperCase().includes("STELLATE") || params.q === "UBERON:0002440") {
         sorted_data.unshift({"Dataset Title": "Mouse Stellate Ganglion", "Description": "Data from the Shivkumar/Tompkins group displayed in a 3D stellate scaffold.",
           "Example Image": "", "Scaffold": {"uri": "https://mapcore-bucket1.s3-us-west-2.amazonaws.com/ISAN/scaffold/stellate/stellate_metadata.json", 'species': 'Mouse', 'organ': 'nerve', 'annotation': 'UBERON:0002440'},
-          "DataViewer": {"uri": "https://mapcore-bucket1.s3-us-west-2.amazonaws.com/ISAN/csv-data/use-case-2/Sample_1_18907001_channel_1.csv", 'species': 'Mouse', 'organ': 'nerve', 'annotation': 'UBERON:0002440'}}
+          "DataViewer": {"uri": "https://mapcore-bucket1.s3-us-west-2.amazonaws.com/ISAN/csv-data/stellate/directory-meta.json", 'species': 'Mouse', 'organ': 'nerve', 'annotation': 'UBERON:0002440'}}
         )
       }
       if (params.q.toUpperCase().includes("LUNG") || params.q === "UBERON:0002048") {
@@ -677,6 +682,36 @@ const renderDescription = (description, max_length) => {
       search_input.value = message.resource
       doQuery()
     }
+  }
+
+  const setupResultTooltips = _ => {
+    tippy('#mapcore_search_result_text_content',{
+      content: 'View expanded description',
+      placement: 'right',
+      animateFill: false,
+      animation: 'shift-away',
+      followCursor: 'initial',
+      delay: [700,0],
+    })
+  }
+
+  const setupIconTooltips = _ => {
+    tooltip('#mapcore_search_result_flatmap_map', 'View map of organs')
+    tooltip('#mapcore_search_result_data_viewer_map', 'View plot of data')
+    tooltip('#mapcore_search_result_simulation_map', 'Run simulation on data')
+    tooltip('#mapcore_search_result_scaffold_map', 'View data on a 3d scaffold')
+    tooltip('#mapcore_search_result_image', 'View full resolution image')
+  }
+
+  const tooltip = (id, message) => {
+    tippy(id,{
+      content: message,
+      placement: 'bottom',
+      animateFill: false,
+      animation: 'shift-away',
+      arrow: true,
+      delay: [500,0],
+    })
   }
 
   const setupSearchWidget = (container) => {
