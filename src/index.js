@@ -254,7 +254,7 @@ const renderDescription = (description, max_length) => {
       target_element.classList.add("hidden")
     }
     if (haveScaffold(data)) {
-      let span_element = createIconSpan("mapcore_search_result_scaffold_map")
+      let span_element = createIconSpan("")
       if (add_links) {
         let supplementary_data = {'species': data["Scaffold"]["species"], 'organ': data["Scaffold"]["organ"], 'annotation': data["Scaffold"]["annotation"]}
         addIconLinks(span_element, "scaffold-show", data["Scaffold"]["uri"], supplementary_data)
