@@ -328,8 +328,10 @@ const renderDescription = (description, max_length) => {
     if (page_number !== null) {
       element.setAttribute("page_number", page_number.toString())
       element.addEventListener("click", this.onPageChange)
+      element.style.opacity = 1
     } else {
-      element.disabled = true
+      element.style['pointer-events'] = 'none' 
+      element.style.opacity = .7
     }
   }
 
@@ -696,11 +698,11 @@ const renderDescription = (description, max_length) => {
   }
 
   const setupIconTooltips = _ => {
-    tooltip('#mapcore_search_result_flatmap_map', 'View map of organs')
-    tooltip('#mapcore_search_result_data_viewer_map', 'View plot of data')
-    tooltip('#mapcore_search_result_simulation_map', 'Run simulation on data')
+    tooltip('#mapcore_search_result_flatmap_map', 'View flatmap of species')
+    tooltip('#mapcore_search_result_data_viewer_map', 'View data on a graph')
+    tooltip('#mapcore_search_result_simulation_map', 'Run simulation using data')
     tooltip('#mapcore_search_result_scaffold_map', 'View data on a 3d scaffold')
-    tooltip('#mapcore_search_result_image', 'View full resolution image')
+    tooltip('#mapcore_search_result_image', 'View associated image(s)')
   }
 
   const tooltip = (id, message) => {
