@@ -229,7 +229,7 @@ exports.FDI_KB_Query_Module = function (parent_in) {
       div_element.firstChild.appendChild(img);
       biolucida_client.get_thumbnail(img, img_id);
       if (add_links) {
-        let supplementary_data = {};
+        let supplementary_data = {"Title": data["Dataset Title"]};
         addIconLinks(div_element, "image-show", data["Example Image"], supplementary_data)
       }
       icons_element.firstElementChild.before(div_element)
