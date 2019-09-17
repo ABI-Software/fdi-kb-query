@@ -14,11 +14,11 @@
 
 .search-result:hover {
 
-  box-shadow: 0 3px 10px 0px rgb(101, 22, 76);
-  -moz-box-shadow: 0 3px 10px 0px rgb(101, 22, 76);
-  -webkit-box-shadow: 0 3px 10px 0px rgb(101, 22, 76);
-  -o-box-shadow: 0 3px 10px 0px rgb(101, 22, 76);
-  -ms-box-shadow: 0 3px 10px 0px rgb(101, 22, 76);
+  box-shadow: 0 3px 10px 0px rgba(44, 3, 80, 0.85);
+  -moz-box-shadow: 0 3px 10px 0px rgba(44, 3, 80, 0.85);
+  -webkit-box-shadow: 0 3px 10px 0px rgba(44, 3, 80, 0.85);
+  -o-box-shadow: 0 3px 10px 0px rgba(44, 3, 80, 0.85);
+  -ms-box-shadow: 0 3px 10px 0px rgba(44, 3, 80, 0.85);
 }
 
 #mapcore_search_result_heading {
@@ -27,6 +27,7 @@
   overflow: hidden;
   margin-block-start: .5em;
   margin-block-end: .5em;
+  cursor: pointer;
 }
 
 .search-result .description {
@@ -36,6 +37,7 @@
   font-size: .9em;
   margin-block-start: .5em;
   margin-block-end: .5em;
+  cursor: pointer;
 }
 
 
