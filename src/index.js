@@ -3,6 +3,8 @@ const biolucidaclient_module = require('@abi-software/biolucidaclient').biolucid
 const prepackagedresults_module = require('@abi-software/mapcore-pre-packaged-results').mapcore_pre_packaged_results_module;
 const augmentedresults_module = require('@abi-software/mapcore-augmented-results').mapcore_augmented_results_module;
 const parseString = require('xml2js').parseString;
+const tippy = require('tippy.js/umd/index.all.js');
+
 require("./styles/searchwidget.css");
 require("./styles/searchresultslist.css");
 require("./styles/searchresult.css");
@@ -243,7 +245,8 @@ exports.FDI_KB_Query_Module = function (parent_in) {
       element.classList.add("mapcore-search-icon-medium")
     });
 
-    parent.appendChild(element)
+    parent.appendChild(element);
+    setupIconTooltips()
   };
 
   const renderShortResult = (result_parent, entry_index, data) => {
@@ -328,7 +331,9 @@ exports.FDI_KB_Query_Module = function (parent_in) {
     let paged_data = paginator(data, page_number, per_page);
     prepareHeader(!!active_search_results);
     renderResults(paged_data, page_number);
-    prepareFooter(paged_data)
+    prepareFooter(paged_data);
+    setupIconTooltips();
+    setupResultTooltips()
   };
 
   const storePageNumber = (page_number, variant) => {
@@ -512,6 +517,36 @@ exports.FDI_KB_Query_Module = function (parent_in) {
       search_input.value = message.resource;
       doQuery()
     }
+  };
+
+  const setupResultTooltips = () => {
+    tippy('#mapcore_search_result_text_content',{
+      content: 'View expanded description',
+      placement: 'right',
+      animateFill: false,
+      animation: 'shift-away',
+      followCursor: 'initial',
+      delay: [700,0],
+    })
+  };
+
+  const setupIconTooltips = () => {
+    tooltip('#mapcore_search_result_flatmap_map', 'View map of organs');
+    tooltip('#mapcore_search_result_data_viewer_map', 'View plot of data');
+    tooltip('#mapcore_search_result_simulation_map', 'Run simulation on data');
+    tooltip('#mapcore_search_result_scaffold_map', 'View data on a 3d scaffold');
+    tooltip('#mapcore_search_result_image', 'View full resolution image')
+  };
+
+  const tooltip = (id, message) => {
+    tippy(id,{
+      content: message,
+      placement: 'bottom',
+      animateFill: false,
+      animation: 'shift-away',
+      arrow: true,
+      delay: [500,0],
+    })
   };
 
   const setupSearchWidget = (container) => {
