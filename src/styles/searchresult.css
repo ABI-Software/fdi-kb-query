@@ -1,28 +1,45 @@
 .search-result {
   position: relative;
   background-color: white;
-  border: 1px solid;
+
   border-radius: 7px;
-  margin: 2px 0;
-  padding: 3px;
+  margin: 10px 0;
+  padding: 5px;
+  box-shadow: 0 3px 10px 0px rgba(0, 0, 0, 0.2);
+  -moz-box-shadow: 0 3px 10px 0px rgba(0, 0, 0, 0.2);
+  -webkit-box-shadow: 0 3px 10px 0px rgba(0, 0, 0, 0.2);
+  -o-box-shadow: 0 3px 10px 0px rgba(0, 0, 0, 0.2);
+  -ms-box-shadow: 0 3px 10px 0px rgba(0, 0, 0, 0.2);
 }
 
 .search-result:hover {
-  background-color: #aaa;
-  cursor: pointer;
+
+  box-shadow: 0 3px 10px 0px rgba(44, 3, 80, 0.85);
+  -moz-box-shadow: 0 3px 10px 0px rgba(44, 3, 80, 0.85);
+  -webkit-box-shadow: 0 3px 10px 0px rgba(44, 3, 80, 0.85);
+  -o-box-shadow: 0 3px 10px 0px rgba(44, 3, 80, 0.85);
+  -ms-box-shadow: 0 3px 10px 0px rgba(44, 3, 80, 0.85);
 }
 
 #mapcore_search_result_heading {
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
+  margin-block-start: .5em;
+  margin-block-end: .5em;
+  cursor: pointer;
 }
 
 .search-result .description {
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
+  font-size: .9em;
+  margin-block-start: .5em;
+  margin-block-end: .5em;
+  cursor: pointer;
 }
+
 
 .search-result:hover .description_off {
   white-space: unset;
