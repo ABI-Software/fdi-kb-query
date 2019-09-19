@@ -1,6 +1,6 @@
 {
   "name": "fdikbquery",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "description": "FDI Knowledge base query tool.",
   "main": "build/fdikbquery.js",
   "files": [
@@ -45,6 +45,7 @@
     "style-loader": "^0.21.0",
     "webpack": "^4.20.2",
     "webpack-cli": "^3.1.1",
+    "webpack-node-externals": "^1.7.2",
     "xml2js": "^0.4.19"
   },
   "dependencies": {

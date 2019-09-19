@@ -1,11 +1,15 @@
 var path = require('path');
 var webpack = require('webpack');
+const nodeExternals = require('webpack-node-externals');
 
 module.exports = {
   mode: "none",
   entry: {
     "fdikbquery": "./src/index.js",
   },
+  externals: [
+    nodeExternals({}),
+  ],
   output: {
     path: path.resolve(__dirname, 'build'),
     filename: "[name].js",

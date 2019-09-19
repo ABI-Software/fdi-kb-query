@@ -3,6 +3,7 @@
 .mapcore-search-field-container {
   display: inline-block;
   position: relative;
+  width:500px;
 }
 
 .mapcore-search-button-container {
