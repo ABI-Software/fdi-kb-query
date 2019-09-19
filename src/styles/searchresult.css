@@ -61,7 +61,7 @@
   overflow: auto;
 }
 
-#.search-result-icon, #mapcore_search_result_data_viewer_map.search-result-icon, #mapcore_search_result_simulation_map.search-result-icon, #mapcore_search_result_flatmap_map.search-result-icon {
+#mapcore_search_result_scaffold_map.search-result-icon, #mapcore_search_result_data_viewer_map.search-result-icon, #mapcore_search_result_simulation_map.search-result-icon, #mapcore_search_result_flatmap_map.search-result-icon {
   width: 1em;
   height: 1em;
   border: none;
