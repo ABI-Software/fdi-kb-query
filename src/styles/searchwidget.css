@@ -23,6 +23,12 @@
   color: white;
 }
 
+.mapcore-search-button.disabled {
+  pointer-events: none;
+  background-color: grey;
+  color:darkgrey;
+}
+
 .mapcore-search-elements-container {
     text-align: center;
 }
