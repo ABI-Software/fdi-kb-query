@@ -336,6 +336,7 @@ exports.FDI_KB_Query_Module = function (parent_in) {
     prepareFooter(paged_data);
     setupIconTooltips();
     setupResultTooltips()
+    showResultContainer();
   };
 
   const storePageNumber = (page_number, variant) => {
@@ -507,7 +508,13 @@ exports.FDI_KB_Query_Module = function (parent_in) {
       })
   };
 
+  const showResultContainer = () => {
+    let resultContainer = parent.querySelector("#mapcore_search_results_container");
+    resultContainer.classList.remove("container-collapsed-mode");
+  }
+
   const doQuery = () => {
+    toggleSearchability();
     let search_input = parent.querySelector("#mapcore_search_input");
     let search_term = augmented_results.modifySearchTerm(search_input.value);
     this.query(query_context, {q: search_term})
@@ -538,6 +545,7 @@ exports.FDI_KB_Query_Module = function (parent_in) {
     tooltip('#mapcore_search_result_simulation_map', 'Run simulation using data');
     tooltip('#mapcore_search_result_scaffold_map', 'View data on a 3d scaffold');
     tooltip('#mapcore_search_result_image', 'View associated image(s)');
+    tooltip('.mapcore_search_results_toggle_container', 'Display/Hide search results');
   };
 
   const tooltip = (id, message) => {
@@ -551,6 +559,17 @@ exports.FDI_KB_Query_Module = function (parent_in) {
     })
   };
 
+  const toggleSearchability = () => {
+    let search_input = parent.querySelector("#mapcore_search_input");
+    const button = parent.querySelector(".mapcore-search-button-container button");
+    if (!search_input.value || search_input.value === "") {
+      button.classList.add("disabled");
+    } else {
+      button.classList.remove("disabled");
+    }
+  }
+
+
   const setupSearchWidget = (container) => {
     container.firstElementChild.after(this.htmlToElement(require("./snippets/searchwidget.html")));
     let search_form = container.querySelector(".mapcore-search-form");
@@ -560,11 +579,25 @@ exports.FDI_KB_Query_Module = function (parent_in) {
         event.preventDefault();
         doQuery()
       })
+      search_form.addEventListener("input", event => {
+        event.preventDefault();
+        toggleSearchability();
+      })
     }
+    toggleSearchability();
   };
 
+  const toggleResultContainer = () => {
+    let resultContainer = parent.querySelector("#mapcore_search_results_container");
+    resultContainer.classList.toggle("container-collapsed-mode");
+  }
+
   const setupSearchResults = (container) => {
-    container.firstElementChild.before(this.htmlToElement(require("./snippets/searchresultslist.html")))
+    container.firstElementChild.before(this.htmlToElement(require("./snippets/searchresultslist.html")));
+    let collapse_button = container.querySelector(".mapcore_search_results_toggle_container");
+    if (collapse_button) {
+      collapse_button.addEventListener("click", toggleResultContainer);
+    }
   };
 
   const initialise = () => {
