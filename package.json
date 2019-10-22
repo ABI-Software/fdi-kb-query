@@ -1,6 +1,6 @@
 {
   "name": "fdikbquery",
-  "version": "0.1.13",
+  "version": "0.1.14",
   "description": "FDI Knowledge base query tool.",
   "main": "build/fdikbquery.js",
   "files": [
@@ -48,7 +48,7 @@
   },
   "dependencies": {
     "@abi-software/biolucidaclient": "^0.2.1",
-    "@abi-software/mapcore-augmented-results": "^0.1.4",
+    "@abi-software/mapcore-augmented-results": "^0.1.5",
     "@abi-software/mapcore-pre-packaged-results": "^0.1.7",
     "axios": "^0.19.0",
     "broadcast-channel": "^2.2.0",
