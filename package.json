@@ -50,7 +50,7 @@
     "@abi-software/biolucidaclient": "^0.2.1",
     "@abi-software/mapcore-augmented-results": "^0.1.5",
     "@abi-software/mapcore-pre-packaged-results": "^0.1.8",
-    "axios": "^0.19.0",
+    "axios": "^0.21.1",
     "broadcast-channel": "^2.2.0",
     "tippy.js": "^4.3.5",
     "xml2js": "^0.4.22"
